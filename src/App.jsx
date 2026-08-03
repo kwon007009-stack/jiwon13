@@ -257,6 +257,7 @@ function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [periodFilter, setPeriodFilter] = useState("2026YTD");
+  const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
   const [uploadNotice, setUploadNotice] = useState("");
 
   useEffect(() => {
@@ -296,6 +297,19 @@ function App() {
   const buyerRanking = useMemo(() => groupAndSum(filteredData, "buyerName").slice(0, 10), [filteredData]);
   const productShare = useMemo(() => groupAndSum(filteredData, "productGroup"), [filteredData]);
   const trendData = useMemo(() => monthlyTrend(filteredData), [filteredData]);
+  const selectedAnnualSummary = useMemo(
+    () => VERIFIED_VDI_SALES.find(summary => summary.year === selectedAnnualYear) ?? VERIFIED_VDI_SALES.at(-1),
+    [selectedAnnualYear]
+  );
+  const annualShareData = useMemo(
+    () => selectedAnnualSummary?.companies?.map(company => ({
+      name: company.supplierName,
+      amount: safeNumber(company.amount),
+      share: safeNumber(company.share),
+      count: safeNumber(company.count)
+    })) ?? [],
+    [selectedAnnualSummary]
+  );
 
   const handleUpload = async event => {
     const file = event.target.files?.[0];
@@ -388,17 +402,40 @@ function App() {
           </div>
         ) : null}
 
-        <section className="mb-5 grid gap-4 xl:grid-cols-2">
-          {VERIFIED_VDI_SALES.map(summary => (
-            <article key={summary.year} className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
+        <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
+          <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h2 className="text-base font-black text-white">연도별 VDI 조달판매 상세 분석</h2>
+              <p className="mt-1 text-xs text-cyan-100/70">연도를 선택하면 공급기업별 금액, 점유율, 건수와 원형 점유율 그래프가 함께 갱신됩니다.</p>
+            </div>
+            <div className="flex rounded-xl border border-white/10 bg-slate-950/70 p-1">
+              {VERIFIED_VDI_SALES.map(summary => (
+                <button
+                  key={summary.year}
+                  type="button"
+                  onClick={() => setSelectedAnnualYear(summary.year)}
+                  className={`h-9 rounded-lg px-4 text-sm font-black transition ${
+                    selectedAnnualYear === summary.year
+                      ? "bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-950/30"
+                      : "text-slate-300 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {summary.year}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-base font-black text-white">{summary.label}</h2>
-                  <p className="mt-1 text-xs text-cyan-100/70">{summary.basis}</p>
+                  <h3 className="text-lg font-black text-white">{selectedAnnualSummary?.label}</h3>
+                  <p className="mt-1 text-xs text-cyan-100/70">{selectedAnnualSummary?.basis}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-slate-400">합계</p>
-                  <p className="text-xl font-black text-cyan-200">{summary.totalAmount.toLocaleString("ko-KR")}원</p>
+                  <p className="text-2xl font-black text-cyan-200">{safeNumber(selectedAnnualSummary?.totalAmount).toLocaleString("ko-KR")}원</p>
                 </div>
               </div>
               <div className="overflow-hidden rounded-xl border border-white/10">
@@ -406,15 +443,17 @@ function App() {
                   <thead className="bg-slate-950/70 text-xs text-slate-400">
                     <tr>
                       <th className="px-3 py-2 text-left">공급기업</th>
+                      <th className="px-3 py-2 text-left">제품명</th>
                       <th className="px-3 py-2 text-right">금액</th>
                       <th className="px-3 py-2 text-right">점유율</th>
                       <th className="px-3 py-2 text-right">건수</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/10">
-                    {summary.companies.map(company => (
-                      <tr key={`${summary.year}-${company.supplierName}`} className={company.supplierName === "틸론" ? "bg-cyan-300/10" : ""}>
+                    {selectedAnnualSummary?.companies?.map(company => (
+                      <tr key={`${selectedAnnualSummary.year}-${company.supplierName}`} className={company.supplierName === "틸론" ? "bg-cyan-300/10" : ""}>
                         <td className="px-3 py-2 font-bold text-white">{company.supplierName}</td>
+                        <td className="px-3 py-2 text-cyan-100">{company.productName}</td>
                         <td className="px-3 py-2 text-right text-slate-200">{company.amount.toLocaleString("ko-KR")}원</td>
                         <td className="px-3 py-2 text-right font-bold text-cyan-200">{company.share.toFixed(2)}%</td>
                         <td className="px-3 py-2 text-right text-slate-300">{company.count}건</td>
@@ -424,7 +463,39 @@ function App() {
                 </table>
               </div>
             </article>
-          ))}
+
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-sm font-black text-white">{selectedAnnualSummary?.year}년 공급기업 점유율</h3>
+                  <p className="mt-1 text-xs text-slate-400">계약금액 기준 비중</p>
+                </div>
+                <p className="text-right text-xs font-bold text-cyan-200">{formatCount(annualShareData.length)}개사</p>
+              </div>
+              <div className="h-[260px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={annualShareData} dataKey="amount" nameKey="name" innerRadius={62} outerRadius={104} paddingAngle={3}>
+                      {annualShareData.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
+                    </Pie>
+                    <Tooltip contentStyle={{ background: "#020617", border: "1px solid #334155", borderRadius: 12 }} formatter={(value, name) => [formatMoney(value), name]} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="mt-4 space-y-2">
+                {annualShareData.map((company, index) => (
+                  <div key={company.name} className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] px-3 py-2 text-xs">
+                    <span className="flex min-w-0 items-center gap-2 font-bold text-white">
+                      <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
+                      <span className="truncate">{company.name}</span>
+                    </span>
+                    <span className="shrink-0 text-cyan-200">{company.share.toFixed(2)}%</span>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
         </section>
 
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
@@ -493,14 +564,7 @@ function App() {
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <KpiCard title="조회된 공급기업 수" value={`${formatCount(kpis.supplierCount)}개사`} helper="공급기업명 고유 개수" icon={Database} />
-          <KpiCard title="총 계약금액" value={formatMoney(kpis.totalAmount)} helper="filteredData 계약금액 합계" icon={TrendingUp} accent={PURPLE} />
-          <KpiCard title="총 계약 건수" value={`${formatCount(kpis.totalContracts)}건`} helper="계약 건수 합계" icon={ShieldCheck} accent={GREEN} />
-          <KpiCard title="평균 계약 단가" value={formatMoney(kpis.averageAmount)} helper="총 계약금액 / 총 계약 건수" icon={Database} accent={PINK} />
-        </section>
-
-        <section className="mt-6 grid gap-5 xl:grid-cols-2">
+        <section className="grid gap-5 xl:grid-cols-2">
           <ChartCard title="검증 기준 공급기업 랭킹 TOP 15" subtitle="2025년 확정값 + 2026년 6월 22일 기준 입력값만 합산. Mock/가중치 제외">
             {supplierRanking.length ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -559,6 +623,13 @@ function App() {
               </ResponsiveContainer>
             ) : <EmptyState />}
           </ChartCard>
+        </section>
+
+        <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <KpiCard title="조회된 공급기업 수" value={`${formatCount(kpis.supplierCount)}개사`} helper="공급기업명 고유 개수" icon={Database} />
+          <KpiCard title="총 계약금액" value={formatMoney(kpis.totalAmount)} helper="filteredData 계약금액 합계" icon={TrendingUp} accent={PURPLE} />
+          <KpiCard title="총 계약 건수" value={`${formatCount(kpis.totalContracts)}건`} helper="계약 건수 합계" icon={ShieldCheck} accent={GREEN} />
+          <KpiCard title="평균 계약 단가" value={formatMoney(kpis.averageAmount)} helper="총 계약금액 / 총 계약 건수" icon={Database} accent={PINK} />
         </section>
 
         <section className="mt-6 rounded-2xl border border-white/10 bg-slate-900/75 p-5 shadow-2xl shadow-black/20">
