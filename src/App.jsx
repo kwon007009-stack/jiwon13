@@ -179,6 +179,20 @@ function groupAndSum(data, key) {
   return [...map.values()].sort((a, b) => b.amount - a.amount);
 }
 
+function buildAnnualSupplierRanking(summaries) {
+  const map = new Map();
+  summaries.forEach(summary => {
+    summary.companies?.forEach(company => {
+      const supplierName = safeText(company?.supplierName) || "미분류";
+      const current = map.get(supplierName) ?? { name: supplierName, amount: 0, count: 0 };
+      current.amount += safeNumber(company?.amount);
+      current.count += safeNumber(company?.count);
+      map.set(supplierName, current);
+    });
+  });
+  return [...map.values()].sort((a, b) => b.amount - a.amount);
+}
+
 function monthlyTrend(data) {
   const map = new Map();
   data.forEach(item => {
@@ -293,7 +307,7 @@ function App() {
     return { supplierCount, totalAmount, totalContracts, averageAmount };
   }, [filteredData]);
 
-  const supplierRanking = useMemo(() => groupAndSum(filteredData, "supplierName").slice(0, 15), [filteredData]);
+  const supplierRanking = useMemo(() => buildAnnualSupplierRanking(VERIFIED_VDI_SALES).slice(0, 15), []);
   const buyerRanking = useMemo(() => groupAndSum(filteredData, "buyerName").slice(0, 10), [filteredData]);
   const productShare = useMemo(() => groupAndSum(filteredData, "productGroup"), [filteredData]);
   const trendData = useMemo(() => monthlyTrend(filteredData), [filteredData]);
@@ -478,19 +492,29 @@ function App() {
                     <Pie data={annualShareData} dataKey="amount" nameKey="name" innerRadius={62} outerRadius={104} paddingAngle={3}>
                       {annualShareData.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
                     </Pie>
-                    <Tooltip contentStyle={{ background: "#020617", border: "1px solid #334155", borderRadius: 12 }} formatter={(value, name) => [formatMoney(value), name]} />
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
               <div className="mt-4 space-y-2">
                 {annualShareData.map((company, index) => (
-                  <div key={company.name} className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] px-3 py-2 text-xs">
-                    <span className="flex min-w-0 items-center gap-2 font-bold text-white">
-                      <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
-                      <span className="truncate">{company.name}</span>
-                    </span>
-                    <span className="shrink-0 text-cyan-200">{company.share.toFixed(2)}%</span>
+                  <div key={company.name} className="rounded-xl bg-white/[0.03] px-3 py-2.5 text-xs">
+                    <div className="mb-2 flex items-center justify-between gap-3">
+                      <span className="flex min-w-0 items-center gap-2 font-bold text-white">
+                        <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
+                        <span className="truncate">{company.name}</span>
+                      </span>
+                      <span className="shrink-0 text-cyan-200">{company.share.toFixed(2)}%</span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${Math.max(3, Math.min(100, company.share))}%`,
+                          backgroundColor: CHART_COLORS[index % CHART_COLORS.length]
+                        }}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
