@@ -1,5 +1,6 @@
 server.out.log
 server.err.log
+sites-build.tar.gz
 node_modules/
 dist/
 .env
