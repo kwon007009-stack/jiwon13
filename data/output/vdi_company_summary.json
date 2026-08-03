@@ -1,0 +1,89 @@
+{
+  "basis": "사용자 검증값 및 엑셀 분석 요약",
+  "annualVerifiedSales": [
+    {
+      "year": 2025,
+      "label": "2025년 VDI 조달판매",
+      "totalAmount": 2949260200,
+      "basis": "연간 확정 기준",
+      "companies": [
+        { "supplierName": "틸론", "productName": "Dstation X", "amount": 2221530200, "share": 75.32, "count": 33 },
+        { "supplierName": "쓰리에스소프트", "productName": "NEPYX NetDesktop", "amount": 477730000, "share": 16.2, "count": 4 },
+        { "supplierName": "소만사", "productName": "VD-i", "amount": 250000000, "share": 8.48, "count": 1 }
+      ]
+    },
+    {
+      "year": 2026,
+      "label": "2026년 VDI 조달판매",
+      "totalAmount": 1072385000,
+      "basis": "2026년 8월 현재 기준",
+      "companies": [
+        { "supplierName": "틸론", "productName": "Dstation", "amount": 720000000, "share": 67.14, "count": 13 },
+        { "supplierName": "쓰리에스소프트", "productName": "NEPYX NetDesktop", "amount": 352385000, "share": 32.86, "count": 2 }
+      ]
+    }
+  ],
+  "tilonDstation": {
+    "company": "틸론",
+    "product": "Dstation",
+    "periodLabel": "최근 3개년",
+    "totalAmount": 2540000000,
+    "totalCount": 56,
+    "summary": "틸론은 공공 VDI 시장에서 건수와 매출 모두 압도적인 성장세를 보이며 대장주 위치를 확고히 하고 있습니다. 2024년부터 2025년 사이 약 6.4배 성장했습니다.",
+    "yearlySales": [
+      { "period": "2024년", "amount": 340000000, "count": 10 },
+      { "period": "2025년", "amount": 2200000000, "count": 33 },
+      { "period": "2026년 8월 현재", "amount": 720000000, "count": 13 }
+    ],
+    "topBuyers": [
+      { "name": "한국산업인력공단", "amount": 740000000 },
+      { "name": "한영대학산학협력단", "amount": 340000000 },
+      { "name": "재정경제부", "amount": 340000000 },
+      { "name": "한국철도공사(코레일)", "amount": 230000000 },
+      { "name": "백석대학교", "amount": 210000000 }
+    ]
+  },
+  "competitorAnalysis": [
+    {
+      "company": "소만사",
+      "product": "VD-i",
+      "periodLabel": "최근 3개년",
+      "totalAmount": 250000000,
+      "totalCount": 1,
+      "summary": "VDI 시장 내 실적은 미미하나, 고위험/보안 필수 기관인 경찰청을 단일 타겟팅한 납품 실적이 확인됩니다.",
+      "yearlySales": [
+        { "period": "2023.08~2024.08", "amount": null, "count": 0, "unknown": false },
+        { "period": "2024.08~2025.08", "amount": null, "count": 0, "unknown": false },
+        { "period": "2025.08~2026.08", "amount": 250000000, "count": 1 }
+      ],
+      "topBuyers": [
+        { "name": "경찰청", "amount": 250000000, "count": 1 }
+      ]
+    },
+    {
+      "company": "쓰리에스소프트",
+      "product": "NEPYX NetDesktop",
+      "periodLabel": "최근 4개년",
+      "totalAmount": 1040000000,
+      "totalCount": 12,
+      "summary": "틸론을 추격하는 실질적인 위협입니다. 최근 2년간 VDI 매출이 400% 이상 성장하며 연구기관·환경기관 중심으로 빠르게 확대되고 있습니다.",
+      "yearlySales": [
+        { "period": "2022.08~2023.08", "amount": 4000000, "count": 1 },
+        { "period": "2023.08~2024.08", "amount": 140000000, "count": 2 },
+        { "period": "2024.08~2025.08", "amount": 310000000, "count": 5 },
+        { "period": "2025.08~2026.08", "amount": 580000000, "count": 4 }
+      ],
+      "topBuyers": [
+        { "name": "한국과학기술정보연구원(KISTI)", "amount": 468000000 },
+        { "name": "한국환경산업기술원", "amount": 290000000 },
+        { "name": "국세청", "amount": 94000000 }
+      ]
+    }
+  ],
+  "unverifiedCompanies": ["이트론", "엔컴퓨팅", "에스피소프트"],
+  "validationNotes": [
+    "2021~2024 전체 6개사 API 원천자료는 아직 미수집",
+    "2026년 값은 조회 기준일에 따라 기존 6월 22일 기준값과 차이가 발생 가능",
+    "검증되지 않은 회사는 0원이 아니라 미확인으로 처리"
+  ]
+}

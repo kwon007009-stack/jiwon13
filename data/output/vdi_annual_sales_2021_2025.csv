@@ -1,0 +1,16 @@
+year,supplierName,productName,amount,share,count,verificationStatus,notes
+2021,이트론,JDesktop Enterprise,,,,UNVERIFIED,원천자료 미수집
+2021,엔컴퓨팅,VERDE VDI,,,,UNVERIFIED,원천자료 미수집
+2021,에스피소프트,gDaaS,,,,UNVERIFIED,원천자료 미수집
+2022,이트론,JDesktop Enterprise,,,,UNVERIFIED,원천자료 미수집
+2022,엔컴퓨팅,VERDE VDI,,,,UNVERIFIED,원천자료 미수집
+2022,에스피소프트,gDaaS,,,,UNVERIFIED,원천자료 미수집
+2023,이트론,JDesktop Enterprise,,,,UNVERIFIED,원천자료 미수집
+2023,엔컴퓨팅,VERDE VDI,,,,UNVERIFIED,원천자료 미수집
+2023,에스피소프트,gDaaS,,,,UNVERIFIED,원천자료 미수집
+2024,이트론,JDesktop Enterprise,,,,UNVERIFIED,원천자료 미수집
+2024,엔컴퓨팅,VERDE VDI,,,,UNVERIFIED,원천자료 미수집
+2024,에스피소프트,gDaaS,,,,UNVERIFIED,원천자료 미수집
+2025,틸론,Dstation X,2221530200,75.32,33,PARTIALLY_VERIFIED,사용자 검증값
+2025,쓰리에스소프트,NEPYX NetDesktop,477730000,16.20,4,PARTIALLY_VERIFIED,사용자 검증값
+2025,소만사,VD-i,250000000,8.48,1,VERIFIED,물품식별번호 24616488 확인

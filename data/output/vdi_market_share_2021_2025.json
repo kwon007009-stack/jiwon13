@@ -1,0 +1,17 @@
+{
+  "basis": "분석 대상 및 확인된 조달판매 기준 점유율",
+  "period": "2021-01-01~2025-12-31",
+  "scopeWarning": "2021~2024 전체 원천자료 미수집. 현재 2025 검증 입력값만 확정 반영.",
+  "annual": [
+    {
+      "year": 2025,
+      "totalAmount": 2949260200,
+      "companies": [
+        { "supplierName": "틸론", "amount": 2221530200, "share": 75.32, "count": 33, "verificationStatus": "PARTIALLY_VERIFIED" },
+        { "supplierName": "쓰리에스소프트", "amount": 477730000, "share": 16.2, "count": 4, "verificationStatus": "PARTIALLY_VERIFIED" },
+        { "supplierName": "소만사", "amount": 250000000, "share": 8.48, "count": 1, "verificationStatus": "VERIFIED" }
+      ]
+    }
+  ],
+  "unverifiedCompanies": ["이트론", "엔컴퓨팅", "에스피소프트"]
+}

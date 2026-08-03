@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import * as XLSX from "xlsx";
 import {
   Bar,
   BarChart,
@@ -15,6 +16,8 @@ import {
   YAxis
 } from "recharts";
 import { Database, Search, ShieldCheck, TrendingUp } from "lucide-react";
+import productDictionary from "../data/dictionary/vdi_product_dictionary.json";
+import companySummary from "../data/output/vdi_company_summary.json";
 
 const CYAN = "#22d3ee";
 const PURPLE = "#a855f7";
@@ -23,74 +26,12 @@ const PINK = "#f472b6";
 const GREEN = "#34d399";
 const AMBER = "#fbbf24";
 const CHART_COLORS = [CYAN, PURPLE, BLUE, PINK, GREEN, AMBER, "#818cf8", "#2dd4bf"];
-const RECENT_YEAR_START = 2025;
-const RECENT_YEAR_END = 2026;
-const VERIFIED_VDI_SALES = [
-  {
-    year: 2025,
-    label: "2025년 VDI 조달판매",
-    totalAmount: 2949260200,
-    basis: "연간 확정 기준",
-    companies: [
-      { supplierName: "틸론", productName: "Dstation X", amount: 2221530200, share: 75.32, count: 33 },
-      { supplierName: "쓰리에스소프트", productName: "NEPYX NetDesktop", amount: 477730000, share: 16.2, count: 4 },
-      { supplierName: "소만사", productName: "VD-i", amount: 250000000, share: 8.48, count: 1 }
-    ]
-  },
-  {
-    year: 2026,
-    label: "2026년 VDI 조달판매",
-    totalAmount: 712475400,
-    basis: "2026-06-22 기준",
-    companies: [
-      { supplierName: "틸론", productName: "Dstation X", amount: 360090400, share: 50.54, count: 7 },
-      { supplierName: "쓰리에스소프트", productName: "NEPYX NetDesktop", amount: 352385000, share: 49.46, count: 2 }
-    ]
-  }
-];
-const EXCEL_COMPETITOR_ANALYSIS = [
-  {
-    company: "소만사",
-    product: "VD-i",
-    periodLabel: "최근 3개년",
-    totalAmount: 250000000,
-    totalCount: 1,
-    summary:
-      "VDI 시장 내 실적은 미미하나, 고위험/보안 필수 기관인 경찰청을 단일 타겟팅한 납품 실적이 확인됩니다.",
-    yearlySales: [
-      { period: "2023.08~2024.08", amount: 0, count: 0 },
-      { period: "2024.08~2025.08", amount: 0, count: 0 },
-      { period: "2025.08~2026.08", amount: 250000000, count: 1 }
-    ],
-    topBuyers: [
-      { name: "경찰청", amount: 250000000, count: 1 }
-    ],
-    insight:
-      "소만사는 VDI 시장의 파이를 적극적으로 늘리기보다, 자사의 강력한 보안(DLP) 인프라가 이미 깔려있는 대형 보안 기관에 VDI를 끼워파는 형태입니다. 대응 메시지는 범용성, 다양한 공공 레퍼런스, VDI 전문성을 강조하는 쪽이 유리합니다."
-  },
-  {
-    company: "쓰리에스소프트",
-    product: "NEPYX NetDesktop",
-    periodLabel: "최근 4개년",
-    totalAmount: 1040000000,
-    totalCount: 12,
-    summary:
-      "틸론을 추격하는 실질적인 위협입니다. 최근 2년간 VDI 매출이 400% 이상 성장하며 연구기관·환경기관 중심으로 빠르게 확대되고 있습니다.",
-    yearlySales: [
-      { period: "2022.08~2023.08", amount: 4000000, count: 1 },
-      { period: "2023.08~2024.08", amount: 140000000, count: 2 },
-      { period: "2024.08~2025.08", amount: 310000000, count: 5 },
-      { period: "2025.08~2026.08", amount: 580000000, count: 4 }
-    ],
-    topBuyers: [
-      { name: "한국과학기술정보연구원(KISTI)", amount: 468000000 },
-      { name: "한국환경산업기술원", amount: 290000000 },
-      { name: "국세청", amount: 94000000 }
-    ],
-    insight:
-      "NEPYX NetDesktop은 규모는 아직 제한적이지만 성장률이 높습니다. 대응 전략은 KISTI·환경기관·국세청 같은 핵심 수요기관군을 별도 추적하고, 틸론의 안정성·대규모 구축 경험·운영 편의성을 정면 비교하는 방식이 적합합니다."
-  }
-];
+const RECENT_YEAR_START = 2021;
+const RECENT_YEAR_END = 2025;
+const YTD_YEAR = 2026;
+const VERIFIED_VDI_SALES = companySummary.annualVerifiedSales;
+const TILON_DSTATION_ANALYSIS = companySummary.tilonDstation;
+const EXCEL_COMPETITOR_ANALYSIS = companySummary.competitorAnalysis;
 
 const safeText = value => String(value ?? "").trim();
 const searchableText = value => safeText(value).toLowerCase();
@@ -103,12 +44,78 @@ const formatMoney = value => {
   if (amount >= 100000000) return `${(amount / 100000000).toLocaleString("ko-KR", { maximumFractionDigits: 1 })}억`;
   return `${Math.round(amount / 10000).toLocaleString("ko-KR")}만`;
 };
+const formatNullableMoney = value => value === null || value === undefined || value === "" ? "미확인" : formatMoney(value);
 const formatCount = value => safeNumber(value).toLocaleString("ko-KR");
 
 function splitAmount(totalAmount, count) {
   const base = Math.floor(totalAmount / count);
   const remainder = totalAmount - base * count;
   return Array.from({ length: count }, (_, index) => base + (index === count - 1 ? remainder : 0));
+}
+
+function pickValue(row, candidates) {
+  const key = candidates.find(candidate => row[candidate] !== undefined && row[candidate] !== null && row[candidate] !== "");
+  return key ? row[key] : "";
+}
+
+function classifyRecord(row) {
+  const supplierName = safeText(pickValue(row, ["supplierName", "공급기업명", "업체명", "계약업체명", "제조사"]));
+  const productName = safeText(pickValue(row, ["productName", "제품명", "품명", "물품명", "품목명", "세부품명"]));
+  const itemId = safeText(pickValue(row, ["물품식별번호", "productIdentificationNumber", "itemIdentifier"]));
+  const text = searchableText(`${supplierName} ${productName} ${pickValue(row, ["계약명", "납품요구명", "규격"])}`);
+
+  const matched = productDictionary.find(entry => {
+    const hasExcluded = (entry.excludedKeywords ?? []).some(keyword => text.includes(searchableText(keyword)));
+    if (hasExcluded) return false;
+    const idMatch = (entry.productIdentificationNumbers ?? []).some(id => id && id === itemId);
+    const productMatch = (entry.productAliases ?? []).some(alias => text.includes(searchableText(alias)));
+    const companyMatch = [entry.standardCompanyName, ...(entry.companyAliases ?? [])].some(alias => searchableText(supplierName).includes(searchableText(alias)));
+    return idMatch || productMatch || companyMatch;
+  });
+
+  return matched ?? {
+    standardCompanyName: supplierName || "미확인",
+    standardProductName: productName || "미확인",
+    category: "REVIEW_REQUIRED",
+    directVdi: false,
+    verificationStatus: "REVIEW_REQUIRED"
+  };
+}
+
+function normalizeUploadedRow(row, index) {
+  const classification = classifyRecord(row);
+  const date = safeText(pickValue(row, ["contractDate", "계약일자", "납품요구일자", "requestDate"])) || `${RECENT_YEAR_END}-01-01`;
+  const amount = safeNumber(pickValue(row, ["contractAmount", "금액", "계약금액", "납품금액", "amount"]));
+  const requestNo = safeText(pickValue(row, ["납품요구번호", "requestNo", "계약번호", "contractNo"])) || `UPLOAD-${index}`;
+  const lineNo = safeText(pickValue(row, ["물품순번", "lineNo"])) || "1";
+  const changeSeq = safeText(pickValue(row, ["변경차수", "changeSeq"])) || "0";
+
+  return {
+    id: `${requestNo}-${lineNo}-${changeSeq}`,
+    dedupeKey: `${requestNo}-${lineNo}-${changeSeq}`,
+    supplierName: classification.standardCompanyName,
+    supplierAliases: classification.companyAliases ?? [],
+    productName: classification.standardProductName,
+    productGroup: classification.category === "DIRECT_VDI" ? "직접 VDI" : classification.category,
+    buyerName: safeText(pickValue(row, ["buyerName", "수요기관명", "수요기관", "기관명"])) || "미확인",
+    contractName: safeText(pickValue(row, ["contractName", "계약명", "납품요구명"])) || "업로드 데이터",
+    contractDate: date,
+    contractAmount: amount,
+    contractCount: 1,
+    region: safeText(pickValue(row, ["region", "지역"])) || "미확인",
+    method: safeText(pickValue(row, ["method", "계약방법"])) || "미확인",
+    source: "엑셀/CSV 업로드",
+    verificationStatus: classification.verificationStatus,
+    directVdi: Boolean(classification.directVdi)
+  };
+}
+
+function dedupeRows(rows) {
+  const map = new Map();
+  rows.forEach(row => {
+    map.set(row.dedupeKey ?? row.id, row);
+  });
+  return [...map.values()];
 }
 
 function buildVerifiedVdiSalesRows() {
@@ -133,6 +140,7 @@ function buildVerifiedVdiSalesRows() {
         const day = (index % 24) + 1;
         rows.push({
           id: `VERIFIED-${summary.year}-${company.supplierName}-${String(index + 1).padStart(2, "0")}`,
+          dedupeKey: `VERIFIED-${summary.year}-${company.supplierName}-${String(index + 1).padStart(2, "0")}`,
           supplierName: company.supplierName,
           supplierAliases: [],
           productName: company.productName,
@@ -144,7 +152,9 @@ function buildVerifiedVdiSalesRows() {
           contractCount: 1,
           region: "전국",
           method: index % 3 === 0 ? "조달구매" : index % 3 === 1 ? "일반경쟁" : "수의계약",
-          source: "검증 입력값"
+          source: "검증 입력값",
+          verificationStatus: company.supplierName === "소만사" ? "VERIFIED" : "PARTIALLY_VERIFIED",
+          directVdi: true
         });
       });
     });
@@ -232,9 +242,11 @@ function MiniBars({ rows }) {
         <div key={row.period ?? row.name} className="grid grid-cols-[130px_1fr_82px] items-center gap-3 text-xs">
           <span className="truncate text-slate-300">{row.period ?? row.name}</span>
           <div className="h-2 overflow-hidden rounded-full bg-slate-800">
-            <div className="h-full rounded-full bg-cyan-300" style={{ width: `${Math.max(4, (safeNumber(row.amount) / max) * 100)}%` }} />
+            {row.amount === null || row.amount === undefined ? null : (
+              <div className="h-full rounded-full bg-cyan-300" style={{ width: `${Math.max(4, (safeNumber(row.amount) / max) * 100)}%` }} />
+            )}
           </div>
-          <strong className="text-right text-cyan-100">{formatMoney(row.amount)}</strong>
+          <strong className="text-right text-cyan-100">{formatNullableMoney(row.amount)}</strong>
         </div>
       ))}
     </div>
@@ -244,24 +256,33 @@ function MiniBars({ rows }) {
 function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [periodFilter, setPeriodFilter] = useState("2026YTD");
+  const [uploadNotice, setUploadNotice] = useState("");
 
   useEffect(() => {
     setRawMasterData(buildMockProcurementData());
   }, []);
 
   const recentFiveYearData = useMemo(() => rawMasterData.filter(isInRecentFiveYears), [rawMasterData]);
+  const periodData = useMemo(() => {
+    if (periodFilter === "recent5") return recentFiveYearData;
+    if (periodFilter === "2026YTD") return rawMasterData.filter(item => Number(safeText(item?.contractDate).slice(0, 4)) === YTD_YEAR);
+    if (/^\d{4}$/.test(periodFilter)) return rawMasterData.filter(item => safeText(item?.contractDate).startsWith(periodFilter));
+    return rawMasterData;
+  }, [periodFilter, rawMasterData, recentFiveYearData]);
+  const directVdiData = useMemo(() => periodData.filter(item => item.directVdi !== false), [periodData]);
 
   const filteredData = useMemo(() => {
     const keyword = searchableText(searchTerm);
-    if (!keyword) return recentFiveYearData;
+    if (!keyword) return directVdiData;
 
-    return recentFiveYearData.filter(item => {
+    return directVdiData.filter(item => {
       const supplier = searchableText(item?.supplierName);
       const product = searchableText(item?.productName);
       const buyer = searchableText(item?.buyerName);
       return supplier.includes(keyword) || product.includes(keyword) || buyer.includes(keyword);
     });
-  }, [recentFiveYearData, searchTerm]);
+  }, [directVdiData, searchTerm]);
 
   const kpis = useMemo(() => {
     const supplierCount = new Set(filteredData.map(item => safeText(item?.supplierName)).filter(Boolean)).size;
@@ -275,6 +296,26 @@ function App() {
   const buyerRanking = useMemo(() => groupAndSum(filteredData, "buyerName").slice(0, 10), [filteredData]);
   const productShare = useMemo(() => groupAndSum(filteredData, "productGroup"), [filteredData]);
   const trendData = useMemo(() => monthlyTrend(filteredData), [filteredData]);
+
+  const handleUpload = async event => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const buffer = await file.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: "array" });
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
+      const normalizedRows = rows.map(normalizeUploadedRow);
+      const mergedRows = dedupeRows([...rawMasterData, ...normalizedRows]);
+      setRawMasterData(mergedRows);
+      setUploadNotice(`${file.name}: ${rows.length.toLocaleString("ko-KR")}행 업로드, ${normalizedRows.filter(row => row.directVdi).length.toLocaleString("ko-KR")}행 직접 VDI 후보 반영`);
+    } catch (error) {
+      setUploadNotice(`업로드 실패: ${error.message}`);
+    } finally {
+      event.target.value = "";
+    }
+  };
 
   return (
     <div className="min-h-screen text-slate-100">
@@ -292,15 +333,37 @@ function App() {
             </p>
           </div>
 
-          <label className="relative block w-full lg:w-[460px]">
-            <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-cyan-300" size={20} />
-            <input
-              value={searchTerm}
-              onChange={event => setSearchTerm(event.target.value)}
-              placeholder="틸론, 쓰리에스소프트, 소만사, VDI, 보안가상화, 공공기관명 검색"
-              className="h-[52px] w-full rounded-2xl border border-cyan-300/20 bg-slate-900/90 py-4 pl-12 pr-4 text-sm text-white outline-none ring-0 transition placeholder:text-slate-500 focus:border-cyan-300/70 focus:bg-slate-900"
-            />
-          </label>
+          <div className="grid w-full gap-3 lg:w-[640px]">
+            <label className="relative block">
+              <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-cyan-300" size={20} />
+              <input
+                value={searchTerm}
+                onChange={event => setSearchTerm(event.target.value)}
+                placeholder="틸론, 쓰리에스소프트, 소만사, VDI, 보안가상화, 공공기관명 검색"
+                className="h-[52px] w-full rounded-2xl border border-cyan-300/20 bg-slate-900/90 py-4 pl-12 pr-4 text-sm text-white outline-none ring-0 transition placeholder:text-slate-500 focus:border-cyan-300/70 focus:bg-slate-900"
+              />
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <select
+                value={periodFilter}
+                onChange={event => setPeriodFilter(event.target.value)}
+                className="h-10 rounded-xl border border-white/10 bg-slate-900 px-3 text-sm text-slate-100 outline-none"
+              >
+                <option value="recent5">최근 5개년(2021~2025)</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026YTD">2026 YTD</option>
+                <option value="all">전체/사용자 지정 업로드 포함</option>
+              </select>
+              <label className="inline-flex h-10 cursor-pointer items-center rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-3 text-sm font-bold text-cyan-100 hover:bg-cyan-300/20">
+                엑셀 업로드
+                <input type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={handleUpload} />
+              </label>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -308,7 +371,7 @@ function App() {
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-slate-400">
             조회 결과 <span className="font-bold text-cyan-300">{formatCount(filteredData.length)}</span>건 /
-            최근 5개년 원본 <span className="font-bold text-white">{formatCount(recentFiveYearData.length)}</span>건
+            분석 대상 원본 <span className="font-bold text-white">{formatCount(directVdiData.length)}</span>건
           </p>
           {searchTerm ? (
             <button
@@ -319,6 +382,11 @@ function App() {
             </button>
           ) : null}
         </div>
+        {uploadNotice ? (
+          <div className="mb-5 rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-sm text-cyan-100">
+            {uploadNotice}
+          </div>
+        ) : null}
 
         <section className="mb-5 grid gap-4 xl:grid-cols-2">
           {VERIFIED_VDI_SALES.map(summary => (
@@ -357,6 +425,33 @@ function App() {
               </div>
             </article>
           ))}
+        </section>
+
+        <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
+          <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wide text-cyan-200">{TILON_DSTATION_ANALYSIS.periodLabel}</p>
+              <h2 className="mt-1 text-xl font-black text-white">
+                틸론 <span className="text-sm font-bold text-slate-300">({TILON_DSTATION_ANALYSIS.product}) 공공조달 핵심 실적</span>
+              </h2>
+              <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">{TILON_DSTATION_ANALYSIS.summary}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-slate-400">Dstation 누적 실적</p>
+              <p className="text-3xl font-black text-cyan-100">{formatMoney(TILON_DSTATION_ANALYSIS.totalAmount)}</p>
+              <p className="mt-1 text-sm text-slate-300">{TILON_DSTATION_ANALYSIS.totalCount}건</p>
+            </div>
+          </div>
+          <div className="grid gap-5 xl:grid-cols-2">
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <h3 className="mb-3 text-sm font-bold text-white">연도별 Dstation 매출 추이</h3>
+              <MiniBars rows={TILON_DSTATION_ANALYSIS.yearlySales} />
+            </article>
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <h3 className="mb-3 text-sm font-bold text-white">Dstation 주요 수요기관 TOP 5</h3>
+              <MiniBars rows={TILON_DSTATION_ANALYSIS.topBuyers} />
+            </article>
+          </div>
         </section>
 
         <section className="mb-5 rounded-2xl border border-purple-300/20 bg-purple-300/10 p-5 shadow-2xl shadow-black/20">
