@@ -14,7 +14,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { Database, Moon, Search, ShieldCheck, Sun, TrendingUp } from "lucide-react";
+import { Database, Search, ShieldCheck, TrendingUp } from "lucide-react";
 import productDictionary from "../data/dictionary/vdi_product_dictionary.json";
 import companySummary from "../data/output/vdi_company_summary.json";
 
@@ -271,7 +271,6 @@ function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
-  const [themeMode, setThemeMode] = useState("dark");
 
   useEffect(() => {
     setRawMasterData(buildMockProcurementData());
@@ -329,7 +328,7 @@ function App() {
   );
 
   return (
-    <div className={`${themeMode === "light" ? "theme-light" : ""} min-h-screen text-slate-100`}>
+    <div className="theme-light min-h-screen text-slate-100">
       <header className="border-b border-white/10 bg-slate-950/80 px-5 py-5 backdrop-blur">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -354,34 +353,6 @@ function App() {
                 className="h-[52px] w-full rounded-2xl border border-cyan-300/20 bg-slate-900/90 py-4 pl-12 pr-4 text-sm text-white outline-none ring-0 transition placeholder:text-slate-500 focus:border-cyan-300/70 focus:bg-slate-900"
               />
             </label>
-            <div className="flex flex-wrap gap-2">
-              <div className="inline-flex h-10 rounded-xl border border-white/10 bg-slate-900 p-1">
-                <button
-                  type="button"
-                  onClick={() => setThemeMode("dark")}
-                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 text-sm font-bold transition ${
-                    themeMode === "dark"
-                      ? "bg-cyan-300 text-slate-950"
-                      : "text-slate-300 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  <Moon size={15} />
-                  다크
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setThemeMode("light")}
-                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 text-sm font-bold transition ${
-                    themeMode === "light"
-                      ? "bg-cyan-300 text-slate-950"
-                      : "text-slate-300 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  <Sun size={15} />
-                  화이트
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </header>
