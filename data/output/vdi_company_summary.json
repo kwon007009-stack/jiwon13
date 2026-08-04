@@ -23,24 +23,36 @@
       ]
     }
   ],
+  "fiveYearVdiRanking": {
+    "periodLabel": "최근 5개년(2021.08~2026.08)",
+    "basis": "사용자 제공 틸론 5개년 엑셀 + 경쟁사 VDI 전용 검증 요약. 개인정보보호·망연계 등 비VDI 매출 제외.",
+    "totalAmount": 12750021800,
+    "companies": [
+      { "supplierName": "틸론", "productName": "Dstation", "amount": 11460021800, "share": 89.88, "count": 118 },
+      { "supplierName": "쓰리에스소프트", "productName": "NEPYX NetDesktop", "amount": 1040000000, "share": 8.16, "count": 12 },
+      { "supplierName": "소만사", "productName": "VD-i", "amount": 250000000, "share": 1.96, "count": 1 }
+    ]
+  },
   "tilonDstation": {
     "company": "틸론",
     "product": "Dstation",
-    "periodLabel": "최근 3개년",
-    "totalAmount": 2540000000,
-    "totalCount": 56,
-    "summary": "틸론은 공공 VDI 시장에서 건수와 매출 모두 압도적인 성장세를 보이며 대장주 위치를 확고히 하고 있습니다. 2024년부터 2025년 사이 약 6.4배 성장했습니다.",
+    "periodLabel": "최근 5개년",
+    "totalAmount": 11460021800,
+    "totalCount": 118,
+    "summary": "사용자 제공 5개년 엑셀 기준, 틸론은 Dstation/VDI 조달 납품에서 총 114.6억 원, 118건을 기록했습니다. 동일 VDI 전용 검증 기준의 주요 경쟁사 대비 누적 매출 1위입니다.",
     "yearlySales": [
-      { "period": "2024년", "amount": 340000000, "count": 10 },
-      { "period": "2025년", "amount": 2200000000, "count": 33 },
-      { "period": "2026년 8월 현재", "amount": 720000000, "count": 13 }
+      { "period": "2021.08~2022.08", "amount": 1838520000, "count": 27 },
+      { "period": "2022.08~2023.08", "amount": 320400000, "count": 11 },
+      { "period": "2023.08~2024.08", "amount": 5987330000, "count": 23 },
+      { "period": "2024.08~2025.08", "amount": 1017850000, "count": 20 },
+      { "period": "2025.08~2026.08", "amount": 2295921800, "count": 37 }
     ],
     "topBuyers": [
-      { "name": "한국산업인력공단", "amount": 740000000 },
-      { "name": "한영대학산학협력단", "amount": 340000000 },
-      { "name": "재정경제부", "amount": 340000000 },
-      { "name": "한국철도공사(코레일)", "amount": 230000000 },
-      { "name": "백석대학교", "amount": 210000000 }
+      { "name": "제주대학교", "amount": 2616840000 },
+      { "name": "근로복지공단본부", "amount": 1731780000 },
+      { "name": "한국산업인력공단", "amount": 759580000 },
+      { "name": "한국장애인고용공단", "amount": 712800000 },
+      { "name": "한국주택금융공사", "amount": 550800000 }
     ]
   },
   "competitorAnalysis": [

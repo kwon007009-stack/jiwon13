@@ -1,0 +1,35 @@
+{
+  "basis": "사용자 제공 Desktop 엑셀 5개년 파일 분석. 납품요구번호+물품순번 기준 최신 납품요구변경차수만 집계.",
+  "sourceFiles": [
+    "틸론 21.8-22.8.xlsx",
+    "틸론 22.8-23.8.xlsx",
+    "틸론 23.8-24.8.xlsx",
+    "틸론 24.8-25.8.xlsx",
+    "틸론23.8-24.8.xlsx",
+    "틸론25.8-26.8.xlsx"
+  ],
+  "company": "틸론",
+  "product": "Dstation",
+  "periodLabel": "최근 5개년(2021.08~2026.08)",
+  "totalAmount": 11460021800,
+  "totalCount": 118,
+  "yearlySales": [
+    { "period": "2021.08~2022.08", "amount": 1838520000, "count": 27 },
+    { "period": "2022.08~2023.08", "amount": 320400000, "count": 11 },
+    { "period": "2023.08~2024.08", "amount": 5987330000, "count": 23 },
+    { "period": "2024.08~2025.08", "amount": 1017850000, "count": 20 },
+    { "period": "2025.08~2026.08", "amount": 2295921800, "count": 37 }
+  ],
+  "topBuyers": [
+    { "name": "제주대학교", "amount": 2616840000, "count": 2 },
+    { "name": "근로복지공단본부", "amount": 1731780000, "count": 3 },
+    { "name": "한국산업인력공단", "amount": 759580000, "count": 2 },
+    { "name": "한국장애인고용공단", "amount": 712800000, "count": 3 },
+    { "name": "한국주택금융공사", "amount": 550800000, "count": 1 }
+  ],
+  "fiveYearRankingBasis": [
+    { "supplierName": "틸론", "amount": 11460021800, "count": 118, "share": 89.88 },
+    { "supplierName": "쓰리에스소프트", "amount": 1040000000, "count": 12, "share": 8.16 },
+    { "supplierName": "소만사", "amount": 250000000, "count": 1, "share": 1.96 }
+  ]
+}

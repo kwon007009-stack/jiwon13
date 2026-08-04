@@ -30,6 +30,7 @@ const RECENT_YEAR_START = 2021;
 const RECENT_YEAR_END = 2025;
 const YTD_YEAR = 2026;
 const VERIFIED_VDI_SALES = companySummary.annualVerifiedSales;
+const FIVE_YEAR_VDI_RANKING = companySummary.fiveYearVdiRanking;
 const TILON_DSTATION_ANALYSIS = companySummary.tilonDstation;
 const EXCEL_COMPETITOR_ANALYSIS = companySummary.competitorAnalysis;
 
@@ -308,7 +309,18 @@ function App() {
     return { supplierCount, totalAmount, totalContracts, averageAmount };
   }, [filteredData]);
 
-  const supplierRanking = useMemo(() => buildAnnualSupplierRanking(VERIFIED_VDI_SALES).slice(0, 15), []);
+  const supplierRanking = useMemo(
+    () => (FIVE_YEAR_VDI_RANKING?.companies ?? buildAnnualSupplierRanking(VERIFIED_VDI_SALES))
+      .map(company => ({
+        name: company.supplierName,
+        amount: safeNumber(company.amount),
+        count: safeNumber(company.count),
+        share: safeNumber(company.share)
+      }))
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 15),
+    []
+  );
   const buyerRanking = useMemo(() => groupAndSum(filteredData, "buyerName").slice(0, 10), [filteredData]);
   const productShare = useMemo(() => groupAndSum(filteredData, "productGroup"), [filteredData]);
   const trendData = useMemo(() => monthlyTrend(filteredData), [filteredData]);
@@ -556,10 +568,13 @@ function App() {
               <h2 className="mt-1 text-xl font-black text-white">
                 틸론 <span className="text-sm font-bold text-slate-300">({TILON_DSTATION_ANALYSIS.product}) 공공조달 핵심 실적</span>
               </h2>
+              <div className="mt-3 inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-black text-cyan-200">
+                최근 5개년 VDI 조달 누적 매출 1위
+              </div>
               <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">{TILON_DSTATION_ANALYSIS.summary}</p>
             </div>
             <div className="text-right">
-              <p className="text-xs text-slate-400">Dstation 누적 실적</p>
+              <p className="text-xs text-slate-400">5개년 Dstation 누적 실적</p>
               <p className="text-3xl font-black text-cyan-100">{formatMoney(TILON_DSTATION_ANALYSIS.totalAmount)}</p>
               <p className="mt-1 text-sm text-slate-300">{TILON_DSTATION_ANALYSIS.totalCount}건</p>
             </div>
@@ -616,7 +631,7 @@ function App() {
         </section>
 
         <section className="grid gap-5 xl:grid-cols-2">
-          <ChartCard title="검증 기준 공급기업 랭킹 TOP 15" subtitle="2025년 확정값 + 2026년 6월 22일 기준 입력값만 합산. Mock/가중치 제외">
+          <ChartCard title="최근 5개년 VDI 공급기업 랭킹 TOP 15" subtitle={`${FIVE_YEAR_VDI_RANKING?.periodLabel ?? "최근 5개년"} 기준. 틸론 엑셀 실적과 경쟁사 VDI 전용 검증값 합산`}>
             {supplierRanking.length ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={supplierRanking} layout="vertical" margin={{ top: 8, right: 24, left: 32, bottom: 8 }}>
