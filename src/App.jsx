@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import * as XLSX from "xlsx";
 import {
   Bar,
   BarChart,
@@ -271,23 +270,14 @@ function MiniBars({ rows }) {
 function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [periodFilter, setPeriodFilter] = useState("2026YTD");
   const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
   const [themeMode, setThemeMode] = useState("dark");
-  const [uploadNotice, setUploadNotice] = useState("");
 
   useEffect(() => {
     setRawMasterData(buildMockProcurementData());
   }, []);
 
-  const recentFiveYearData = useMemo(() => rawMasterData.filter(isInRecentFiveYears), [rawMasterData]);
-  const periodData = useMemo(() => {
-    if (periodFilter === "recent5") return recentFiveYearData;
-    if (periodFilter === "2026YTD") return rawMasterData.filter(item => Number(safeText(item?.contractDate).slice(0, 4)) === YTD_YEAR);
-    if (/^\d{4}$/.test(periodFilter)) return rawMasterData.filter(item => safeText(item?.contractDate).startsWith(periodFilter));
-    return rawMasterData;
-  }, [periodFilter, rawMasterData, recentFiveYearData]);
-  const directVdiData = useMemo(() => periodData.filter(item => item.directVdi !== false), [periodData]);
+  const directVdiData = useMemo(() => rawMasterData.filter(item => item.directVdi !== false), [rawMasterData]);
 
   const filteredData = useMemo(() => {
     const keyword = searchableText(searchTerm);
@@ -337,26 +327,6 @@ function App() {
     })) ?? [],
     [selectedAnnualSummary]
   );
-
-  const handleUpload = async event => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const buffer = await file.arrayBuffer();
-      const workbook = XLSX.read(buffer, { type: "array" });
-      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
-      const normalizedRows = rows.map(normalizeUploadedRow);
-      const mergedRows = dedupeRows([...rawMasterData, ...normalizedRows]);
-      setRawMasterData(mergedRows);
-      setUploadNotice(`${file.name}: ${rows.length.toLocaleString("ko-KR")}행 업로드, ${normalizedRows.filter(row => row.directVdi).length.toLocaleString("ko-KR")}행 직접 VDI 후보 반영`);
-    } catch (error) {
-      setUploadNotice(`업로드 실패: ${error.message}`);
-    } finally {
-      event.target.value = "";
-    }
-  };
 
   return (
     <div className={`${themeMode === "light" ? "theme-light" : ""} min-h-screen text-slate-100`}>
@@ -411,24 +381,6 @@ function App() {
                   화이트
                 </button>
               </div>
-              <select
-                value={periodFilter}
-                onChange={event => setPeriodFilter(event.target.value)}
-                className="h-10 rounded-xl border border-white/10 bg-slate-900 px-3 text-sm text-slate-100 outline-none"
-              >
-                <option value="recent5">최근 5개년(2021~2025)</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026YTD">2026 YTD</option>
-                <option value="all">전체/사용자 지정 업로드 포함</option>
-              </select>
-              <label className="inline-flex h-10 cursor-pointer items-center rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-3 text-sm font-bold text-cyan-100 hover:bg-cyan-300/20">
-                엑셀 업로드
-                <input type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={handleUpload} />
-              </label>
             </div>
           </div>
         </div>
@@ -449,12 +401,6 @@ function App() {
             </button>
           ) : null}
         </div>
-        {uploadNotice ? (
-          <div className="mb-5 rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-sm text-cyan-100">
-            {uploadNotice}
-          </div>
-        ) : null}
-
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
           <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
             <div>
