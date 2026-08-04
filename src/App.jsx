@@ -7,6 +7,7 @@ import {
   ComposedChart,
   Legend,
   Line,
+  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -14,7 +15,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { Database, Search, ShieldCheck, TrendingUp } from "lucide-react";
+import { Database, ShieldCheck, TrendingUp } from "lucide-react";
 import productDictionary from "../data/dictionary/vdi_product_dictionary.json";
 import companySummary from "../data/output/vdi_company_summary.json";
 
@@ -267,9 +268,61 @@ function MiniBars({ rows }) {
   );
 }
 
+function MiniLineTrend({ rows }) {
+  const chartData = rows.map(row => ({
+    period: row.period ?? row.name,
+    amount: row.amount === null || row.amount === undefined ? 0 : safeNumber(row.amount),
+    count: safeNumber(row.count)
+  }));
+
+  return (
+    <div className="h-[260px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={chartData} margin={{ top: 12, right: 20, left: 4, bottom: 8 }}>
+          <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+          <XAxis
+            dataKey="period"
+            stroke="#64748b"
+            tick={{ fill: "#475569", fontSize: 11, fontWeight: 700 }}
+            tickLine={false}
+          />
+          <YAxis
+            stroke="#64748b"
+            tick={{ fill: "#475569", fontSize: 11, fontWeight: 700 }}
+            tickFormatter={formatMoney}
+            tickLine={false}
+            width={58}
+          />
+          <Tooltip
+            contentStyle={{
+              background: "#ffffff",
+              border: "1px solid #cbd5e1",
+              borderRadius: 12,
+              color: "#0f172a",
+              boxShadow: "0 14px 30px rgba(15,23,42,0.14)"
+            }}
+            labelStyle={{ color: "#0f172a", fontWeight: 900 }}
+            formatter={(value, _name, item) => [
+              `${formatMoney(value)}${item?.payload?.count ? ` / ${formatCount(item.payload.count)}건` : ""}`,
+              "매출"
+            ]}
+          />
+          <Line
+            type="monotone"
+            dataKey="amount"
+            stroke={CYAN}
+            strokeWidth={4}
+            dot={{ r: 5, fill: "#ffffff", stroke: CYAN, strokeWidth: 3 }}
+            activeDot={{ r: 7, fill: CYAN, stroke: "#ffffff", strokeWidth: 3 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
 
   useEffect(() => {
@@ -278,17 +331,7 @@ function App() {
 
   const directVdiData = useMemo(() => rawMasterData.filter(item => item.directVdi !== false), [rawMasterData]);
 
-  const filteredData = useMemo(() => {
-    const keyword = searchableText(searchTerm);
-    if (!keyword) return directVdiData;
-
-    return directVdiData.filter(item => {
-      const supplier = searchableText(item?.supplierName);
-      const product = searchableText(item?.productName);
-      const buyer = searchableText(item?.buyerName);
-      return supplier.includes(keyword) || product.includes(keyword) || buyer.includes(keyword);
-    });
-  }, [directVdiData, searchTerm]);
+  const filteredData = useMemo(() => directVdiData, [directVdiData]);
 
   const kpis = useMemo(() => {
     const supplierCount = new Set(filteredData.map(item => safeText(item?.supplierName)).filter(Boolean)).size;
@@ -343,17 +386,6 @@ function App() {
             </p>
           </div>
 
-          <div className="grid w-full gap-3 lg:w-[640px]">
-            <label className="relative block">
-              <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-cyan-300" size={20} />
-              <input
-                value={searchTerm}
-                onChange={event => setSearchTerm(event.target.value)}
-                placeholder="틸론, 쓰리에스소프트, 소만사, VDI, 보안가상화, 공공기관명 검색"
-                className="h-[52px] w-full rounded-2xl border border-cyan-300/20 bg-slate-900/90 py-4 pl-12 pr-4 text-sm text-white outline-none ring-0 transition placeholder:text-slate-500 focus:border-cyan-300/70 focus:bg-slate-900"
-              />
-            </label>
-          </div>
         </div>
       </header>
 
@@ -363,14 +395,6 @@ function App() {
             조회 결과 <span className="font-bold text-cyan-300">{formatCount(filteredData.length)}</span>건 /
             분석 대상 원본 <span className="font-bold text-white">{formatCount(directVdiData.length)}</span>건
           </p>
-          {searchTerm ? (
-            <button
-              onClick={() => setSearchTerm("")}
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 hover:bg-white/10"
-            >
-              검색 초기화
-            </button>
-          ) : null}
         </div>
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
           <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
@@ -499,7 +523,7 @@ function App() {
           <div className="grid gap-5 xl:grid-cols-2">
             <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
               <h3 className="mb-3 text-sm font-bold text-white">연도별 Dstation 매출 추이</h3>
-              <MiniBars rows={TILON_DSTATION_ANALYSIS.yearlySales} />
+              <MiniLineTrend rows={TILON_DSTATION_ANALYSIS.yearlySales} />
             </article>
             <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
               <h3 className="mb-3 text-sm font-bold text-white">Dstation 주요 수요기관 TOP 5</h3>
