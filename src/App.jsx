@@ -15,7 +15,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { Database, Search, ShieldCheck, TrendingUp } from "lucide-react";
+import { Database, Moon, Search, ShieldCheck, Sun, TrendingUp } from "lucide-react";
 import productDictionary from "../data/dictionary/vdi_product_dictionary.json";
 import companySummary from "../data/output/vdi_company_summary.json";
 
@@ -272,6 +272,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [periodFilter, setPeriodFilter] = useState("2026YTD");
   const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
+  const [themeMode, setThemeMode] = useState("dark");
   const [uploadNotice, setUploadNotice] = useState("");
 
   useEffect(() => {
@@ -346,7 +347,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen text-slate-100">
+    <div className={`${themeMode === "light" ? "theme-light" : ""} min-h-screen text-slate-100`}>
       <header className="border-b border-white/10 bg-slate-950/80 px-5 py-5 backdrop-blur">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -372,6 +373,32 @@ function App() {
               />
             </label>
             <div className="flex flex-wrap gap-2">
+              <div className="inline-flex h-10 rounded-xl border border-white/10 bg-slate-900 p-1">
+                <button
+                  type="button"
+                  onClick={() => setThemeMode("dark")}
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 text-sm font-bold transition ${
+                    themeMode === "dark"
+                      ? "bg-cyan-300 text-slate-950"
+                      : "text-slate-300 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  <Moon size={15} />
+                  다크
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setThemeMode("light")}
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 text-sm font-bold transition ${
+                    themeMode === "light"
+                      ? "bg-cyan-300 text-slate-950"
+                      : "text-slate-300 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  <Sun size={15} />
+                  화이트
+                </button>
+              </div>
               <select
                 value={periodFilter}
                 onChange={event => setPeriodFilter(event.target.value)}
