@@ -11,6 +11,7 @@ import {
   Pie,
   PieChart,
   ResponsiveContainer,
+  Sector,
   Tooltip,
   XAxis,
   YAxis
@@ -306,6 +307,23 @@ function MiniLineTrend({ rows }) {
   );
 }
 
+function renderLeaderSlice(props) {
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  return (
+    <Sector
+      cx={cx}
+      cy={cy}
+      innerRadius={Math.max(0, innerRadius - 4)}
+      outerRadius={outerRadius + 10}
+      startAngle={startAngle}
+      endAngle={endAngle}
+      fill={fill}
+      stroke="#ffffff"
+      strokeWidth={3}
+    />
+  );
+}
+
 function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
   const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
@@ -359,11 +377,17 @@ function App() {
   const annualShareData = useMemo(
     () => selectedAnnualSummary?.companies?.map(company => ({
       name: company.supplierName,
+      productName: company.productName,
       amount: safeNumber(company.amount),
       share: safeNumber(company.share),
-      count: safeNumber(company.count)
+      count: safeNumber(company.count),
+      isLeader: searchableText(company.productName).includes("dstation")
     })).filter(company => company.amount > 0 || company.count > 0) ?? [],
     [selectedAnnualSummary]
+  );
+  const annualLeaderIndex = useMemo(
+    () => annualShareData.findIndex(company => company.isLeader),
+    [annualShareData]
   );
 
   return (
@@ -416,8 +440,8 @@ function App() {
             </div>
           </div>
 
-          <div className="grid items-start gap-5 xl:grid-cols-[1.15fr_0.85fr]">
-            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+          <div className="grid gap-5 xl:grid-cols-2">
+            <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-black text-white">{selectedAnnualSummary?.label}</h3>
@@ -472,7 +496,16 @@ function App() {
               <div className="h-[230px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={annualShareData} dataKey="amount" nameKey="name" innerRadius={54} outerRadius={92} paddingAngle={3}>
+                    <Pie
+                      data={annualShareData}
+                      dataKey="amount"
+                      nameKey="name"
+                      innerRadius={52}
+                      outerRadius={88}
+                      paddingAngle={3}
+                      activeIndex={annualLeaderIndex}
+                      activeShape={renderLeaderSlice}
+                    >
                       {annualShareData.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
                     </Pie>
                     <Tooltip
@@ -516,7 +549,7 @@ function App() {
             </div>
           </div>
           <div className="grid gap-5 xl:grid-cols-2">
-            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+            <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
               <h3 className="mb-3 text-sm font-bold text-white">연도별 Dstation 매출 추이</h3>
               <MiniLineTrend rows={TILON_DSTATION_ANALYSIS.yearlySales} />
             </article>
