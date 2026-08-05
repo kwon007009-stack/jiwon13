@@ -1,86 +1,265 @@
 [
   {
     "standardCompanyName": "틸론",
-    "companyAliases": ["Tilon"],
+    "companyAliases": [
+      "Tilon"
+    ],
     "businessRegistrationNumber": "",
-    "standardProductName": "Dstation",
-    "productAliases": ["Dstation", "Dstation X", "디스테이션"],
-    "productIdentificationNumbers": [],
+    "standardProductName": "Dstation v9.0",
+    "productAliases": [
+      "Dstation v9.0",
+      "Dstation",
+      "24269256"
+    ],
+    "productIdentificationNumbers": [
+      "24269256"
+    ],
     "productClassificationNumbers": [],
     "directVdi": true,
     "category": "DIRECT_VDI",
     "excludedKeywords": [],
-    "notes": "직접 VDI 제품",
-    "verificationStatus": "PARTIALLY_VERIFIED"
+    "notes": "DstationX 가격정하기.xlsx 기준 100유저 이상 / 단가 540,000원",
+    "verificationStatus": "EXCEL_VERIFIED"
+  },
+  {
+    "standardCompanyName": "틸론",
+    "companyAliases": [
+      "Tilon"
+    ],
+    "businessRegistrationNumber": "",
+    "standardProductName": "Dstation v9.0",
+    "productAliases": [
+      "Dstation v9.0",
+      "Dstation",
+      "24269255"
+    ],
+    "productIdentificationNumbers": [
+      "24269255"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 1~99유저 / 단가 590,000원",
+    "verificationStatus": "EXCEL_VERIFIED"
   },
   {
     "standardCompanyName": "쓰리에스소프트",
-    "companyAliases": ["3S소프트", "3S Soft"],
+    "companyAliases": [
+      "3S소프트",
+      "3S Soft"
+    ],
     "businessRegistrationNumber": "",
     "standardProductName": "NEPYX NetDesktop",
-    "productAliases": ["NEPYX NetDesktop", "NetDesktop", "NEPYX NDT", "NDT Suite", "NDT V4"],
-    "productIdentificationNumbers": [],
-    "productClassificationNumbers": [],
-    "directVdi": true,
-    "category": "DIRECT_VDI",
-    "excludedKeywords": ["NEPYX NetworkBridge", "NetworkBridge"],
-    "notes": "NetworkBridge는 망연계 제품으로 직접 VDI에서 제외",
-    "verificationStatus": "PARTIALLY_VERIFIED"
-  },
-  {
-    "standardCompanyName": "소만사",
-    "companyAliases": ["Somansa"],
-    "businessRegistrationNumber": "",
-    "standardProductName": "VD-i",
-    "productAliases": ["VD-i", "VD-i V2.0", "보안가상화"],
-    "productIdentificationNumbers": ["24616488"],
-    "productClassificationNumbers": [],
-    "directVdi": true,
-    "category": "DIRECT_VDI",
-    "excludedKeywords": ["Privacy-i", "WebKeeper", "Server-i"],
-    "notes": "확인된 물품식별번호 24616488",
-    "verificationStatus": "VERIFIED"
-  },
-  {
-    "standardCompanyName": "이트론",
-    "companyAliases": ["Etron"],
-    "businessRegistrationNumber": "",
-    "standardProductName": "JDesktop Enterprise",
-    "productAliases": ["JDesktop", "JDesktop Enterprise", "제이데스크톱"],
-    "productIdentificationNumbers": [],
+    "productAliases": [
+      "NEPYX NetDesktop",
+      "24613909"
+    ],
+    "productIdentificationNumbers": [
+      "24613909"
+    ],
     "productClassificationNumbers": [],
     "directVdi": true,
     "category": "DIRECT_VDI",
     "excludedKeywords": [],
-    "notes": "데이터 미확인 시 0이 아닌 미확인으로 표시",
-    "verificationStatus": "UNVERIFIED"
+    "notes": "DstationX 가격정하기.xlsx 기준 1User / 단가 473,000원",
+    "verificationStatus": "EXCEL_VERIFIED"
+  },
+  {
+    "standardCompanyName": "소만사",
+    "companyAliases": [],
+    "businessRegistrationNumber": "",
+    "standardProductName": "VD-I v2.0",
+    "productAliases": [
+      "VD-I v2.0",
+      "VD-I",
+      "24616486"
+    ],
+    "productIdentificationNumbers": [
+      "24616486"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 1user 라이트 / 단가 340,000원",
+    "verificationStatus": "PRICE_ONLY"
+  },
+  {
+    "standardCompanyName": "소만사",
+    "companyAliases": [],
+    "businessRegistrationNumber": "",
+    "standardProductName": "VD-I v2.0",
+    "productAliases": [
+      "VD-I v2.0",
+      "VD-I",
+      "24616487"
+    ],
+    "productIdentificationNumbers": [
+      "24616487"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 1user 프리미엄 / 단가 1,200,000원",
+    "verificationStatus": "PRICE_ONLY"
+  },
+  {
+    "standardCompanyName": "소만사",
+    "companyAliases": [],
+    "businessRegistrationNumber": "",
+    "standardProductName": "VD-I v2.0",
+    "productAliases": [
+      "VD-I v2.0",
+      "VD-I",
+      "24616488"
+    ],
+    "productIdentificationNumbers": [
+      "24616488"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 1User 퍼포먼스 / 단가 2,500,000원",
+    "verificationStatus": "EXCEL_VERIFIED"
+  },
+  {
+    "standardCompanyName": "이트론",
+    "companyAliases": [],
+    "businessRegistrationNumber": "",
+    "standardProductName": "JDesktop Enterprise v7.0",
+    "productAliases": [
+      "JDesktop Enterprise v7.0",
+      "JDesktop Enterprise",
+      "24567878"
+    ],
+    "productIdentificationNumbers": [
+      "24567878"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 100유저 이상 / 단가 520,000원",
+    "verificationStatus": "EXCEL_VERIFIED"
+  },
+  {
+    "standardCompanyName": "이트론",
+    "companyAliases": [],
+    "businessRegistrationNumber": "",
+    "standardProductName": "JDesktop Enterprise v7.0",
+    "productAliases": [
+      "JDesktop Enterprise v7.0",
+      "JDesktop Enterprise",
+      "24567877"
+    ],
+    "productIdentificationNumbers": [
+      "24567877"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 1~99유저 / 단가 570,000원",
+    "verificationStatus": "EXCEL_VERIFIED"
+  },
+  {
+    "standardCompanyName": "아홉랩",
+    "companyAliases": [],
+    "businessRegistrationNumber": "",
+    "standardProductName": "V-Spacer Desktop V1.2",
+    "productAliases": [
+      "V-Spacer Desktop V1.2",
+      "V-Spacer Desktop",
+      "25302093"
+    ],
+    "productIdentificationNumbers": [
+      "25302093"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 1User, Client / 단가 330,000원",
+    "verificationStatus": "PRICE_ONLY"
   },
   {
     "standardCompanyName": "엔컴퓨팅",
-    "companyAliases": ["NComputing"],
+    "companyAliases": [],
     "businessRegistrationNumber": "",
-    "standardProductName": "VERDE VDI",
-    "productAliases": ["VERDE", "VERDE VDI"],
-    "productIdentificationNumbers": [],
+    "standardProductName": "VERDE VDI 8.3 Enterprise Edition",
+    "productAliases": [
+      "VERDE VDI 8.3 Enterprise Edition",
+      "24983650"
+    ],
+    "productIdentificationNumbers": [
+      "24983650"
+    ],
     "productClassificationNumbers": [],
     "directVdi": true,
     "category": "DIRECT_VDI",
-    "excludedKeywords": ["단말기", "터미널", "thin client"],
-    "notes": "VDI 소프트웨어 없이 단말기만 납품된 행은 제외",
-    "verificationStatus": "UNVERIFIED"
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 1User / 단가 490,000원",
+    "verificationStatus": "EXCEL_VERIFIED"
+  },
+  {
+    "standardCompanyName": "유플렉스소프트",
+    "companyAliases": [],
+    "businessRegistrationNumber": "",
+    "standardProductName": "All-In-One DV 5.0",
+    "productAliases": [
+      "All-In-One DV 5.0",
+      "25769417"
+    ],
+    "productIdentificationNumbers": [
+      "25769417"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 100User 이상 / 단가 472,000원",
+    "verificationStatus": "PRICE_ONLY"
+  },
+  {
+    "standardCompanyName": "유플렉스소프트",
+    "companyAliases": [],
+    "businessRegistrationNumber": "",
+    "standardProductName": "All-In-One DV 5.0",
+    "productAliases": [
+      "All-In-One DV 5.0",
+      "25744755"
+    ],
+    "productIdentificationNumbers": [
+      "25744755"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 Standard / 단가 500,000원",
+    "verificationStatus": "PRICE_ONLY"
   },
   {
     "standardCompanyName": "에스피소프트",
-    "companyAliases": ["SPSoft"],
+    "companyAliases": [],
     "businessRegistrationNumber": "",
-    "standardProductName": "gDaaS",
-    "productAliases": ["gDaaS", "지다스"],
-    "productIdentificationNumbers": [],
+    "standardProductName": "gDaaS v2.0",
+    "productAliases": [
+      "gDaaS v2.0",
+      "gDaaS",
+      "25373644"
+    ],
+    "productIdentificationNumbers": [
+      "25373644"
+    ],
     "productClassificationNumbers": [],
     "directVdi": true,
     "category": "DIRECT_VDI",
-    "excludedKeywords": ["일반 소프트웨어", "유통"],
-    "notes": "일반 소프트웨어 유통 제품 제외",
-    "verificationStatus": "UNVERIFIED"
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 1User / 단가 506,000원",
+    "verificationStatus": "PRICE_ONLY"
   }
 ]

@@ -120,43 +120,28 @@ function dedupeRows(rows) {
 }
 
 function buildVerifiedVdiSalesRows() {
-  const buyers = [
-    "서울특별시교육청",
-    "한국전력공사",
-    "국민건강보험공단",
-    "경기도청",
-    "인천국제공항공사",
-    "한국교육학술정보원",
-    "성남시청",
-    "한국인터넷진흥원",
-    "전라남도교육청",
-    "경기도성남교육지원청"
-  ];
   const rows = [];
 
   VERIFIED_VDI_SALES.forEach(summary => {
     summary.companies.forEach(company => {
-      splitAmount(company.amount, company.count).forEach((amount, index) => {
-        const month = summary.year === 2026 ? (index % 6) + 1 : (index % 12) + 1;
-        const day = (index % 24) + 1;
-        rows.push({
-          id: `VERIFIED-${summary.year}-${company.supplierName}-${String(index + 1).padStart(2, "0")}`,
-          dedupeKey: `VERIFIED-${summary.year}-${company.supplierName}-${String(index + 1).padStart(2, "0")}`,
-          supplierName: company.supplierName,
-          supplierAliases: [],
-          productName: company.productName,
-          productGroup: "직접 VDI",
-          buyerName: buyers[(rows.length + index) % buyers.length],
-          contractName: `${summary.label} ${company.productName} 납품`,
-          contractDate: `${summary.year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
-          contractAmount: amount,
-          contractCount: 1,
-          region: "전국",
-          method: index % 3 === 0 ? "조달구매" : index % 3 === 1 ? "일반경쟁" : "수의계약",
-          source: "검증 입력값",
-          verificationStatus: company.supplierName === "소만사" ? "VERIFIED" : "PARTIALLY_VERIFIED",
-          directVdi: true
-        });
+      const month = summary.year === 2026 ? 6 : 12;
+      rows.push({
+        id: `EXCEL-${summary.year}-${company.supplierName}`,
+        dedupeKey: `EXCEL-${summary.year}-${company.supplierName}`,
+        supplierName: company.supplierName,
+        supplierAliases: [],
+        productName: company.productName,
+        productGroup: "직접 VDI",
+        buyerName: "수요기관 정보 없음(가격표 기준)",
+        contractName: `${summary.label} ${company.productName} 판매라이선스`,
+        contractDate: `${summary.year}-${String(month).padStart(2, "0")}-01`,
+        contractAmount: company.amount,
+        contractCount: company.count,
+        region: "미제공",
+        method: "가격표×판매라이선스",
+        source: "DstationX 가격정하기.xlsx",
+        verificationStatus: "EXCEL_PRICE_LICENSE",
+        directVdi: true
       });
     });
   });
@@ -303,7 +288,7 @@ function MiniLineTrend({ rows }) {
             }}
             labelStyle={{ color: "#0f172a", fontWeight: 900 }}
             formatter={(value, _name, item) => [
-              `${formatMoney(value)}${item?.payload?.count ? ` / ${formatCount(item.payload.count)}건` : ""}`,
+              `${formatMoney(value)}${item?.payload?.count ? ` / ${formatCount(item.payload.count)}개` : ""}`,
               "매출"
             ]}
           />
@@ -353,7 +338,18 @@ function App() {
       .slice(0, 15),
     []
   );
-  const buyerRanking = useMemo(() => groupAndSum(filteredData, "buyerName").slice(0, 10), [filteredData]);
+  const specRanking = useMemo(
+    () => (companySummary.sourceRows ?? [])
+      .map(row => ({
+        name: `${safeText(row?.company)} ${safeText(row?.spec)}`.trim(),
+        amount: Object.values(row?.yearlyAmount ?? {}).reduce((sum, value) => sum + safeNumber(value), 0),
+        count: safeNumber(row?.yearlyQtySum)
+      }))
+      .filter(row => row.amount > 0 || row.count > 0)
+      .sort((a, b) => b.amount - a.amount || b.count - a.count)
+      .slice(0, 10),
+    []
+  );
   const productShare = useMemo(() => groupAndSum(filteredData, "productGroup"), [filteredData]);
   const trendData = useMemo(() => monthlyTrend(filteredData), [filteredData]);
   const selectedAnnualSummary = useMemo(
@@ -392,15 +388,15 @@ function App() {
       <main className="mx-auto max-w-[1440px] px-5 py-6">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-slate-400">
-            조회 결과 <span className="font-bold text-cyan-300">{formatCount(filteredData.length)}</span>건 /
-            분석 대상 원본 <span className="font-bold text-white">{formatCount(directVdiData.length)}</span>건
+            조회 결과 <span className="font-bold text-cyan-300">{formatCount(filteredData.length)}</span>개 요약 /
+            분석 대상 원본 <span className="font-bold text-white">{formatCount(directVdiData.length)}</span>개 요약
           </p>
         </div>
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
           <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
             <div>
               <h2 className="text-base font-black text-white">연도별 VDI 조달판매 상세 분석</h2>
-              <p className="mt-1 text-xs text-cyan-100/70">연도를 선택하면 공급기업별 금액, 점유율, 건수와 원형 점유율 그래프가 함께 갱신됩니다.</p>
+              <p className="mt-1 text-xs text-cyan-100/70">연도를 선택하면 공급기업별 금액, 점유율, 판매라이선스 수와 원형 점유율 그래프가 함께 갱신됩니다.</p>
             </div>
             <div className="flex rounded-xl border border-white/10 bg-slate-950/70 p-1">
               {VERIFIED_VDI_SALES.map(summary => (
@@ -440,7 +436,7 @@ function App() {
                       <th className="px-3 py-2 text-left">제품명</th>
                       <th className="px-3 py-2 text-right">금액</th>
                       <th className="px-3 py-2 text-right">점유율</th>
-                      <th className="px-3 py-2 text-right">건수</th>
+                      <th className="px-3 py-2 text-right">라이선스</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/10">
@@ -450,7 +446,7 @@ function App() {
                         <td className="px-3 py-2 text-cyan-100">{company.productName}</td>
                         <td className="px-3 py-2 text-right text-slate-200">{company.amount.toLocaleString("ko-KR")}원</td>
                         <td className="px-3 py-2 text-right font-bold text-cyan-200">{company.share.toFixed(2)}%</td>
-                        <td className="px-3 py-2 text-right text-slate-300">{company.count}건</td>
+                        <td className="px-3 py-2 text-right text-slate-300">{formatCount(company.count)}개</td>
                       </tr>
                     ))}
                   </tbody>
@@ -462,7 +458,7 @@ function App() {
               <div className="mb-3 flex items-center justify-between gap-3">
                 <div>
                   <h3 className="text-sm font-black text-white">{selectedAnnualSummary?.year}년 공급기업 점유율</h3>
-                  <p className="mt-1 text-xs text-slate-400">계약금액 기준 비중</p>
+                  <p className="mt-1 text-xs text-slate-400">환산 매출 기준 비중</p>
                 </div>
                 <p className="text-right text-xs font-bold text-cyan-200">{formatCount(annualShareData.length)}개사</p>
               </div>
@@ -517,7 +513,7 @@ function App() {
             <div className="text-right">
               <p className="text-xs text-slate-400">5개년 Dstation 누적 실적</p>
               <p className="text-3xl font-black text-cyan-100">{formatMoney(TILON_DSTATION_ANALYSIS.totalAmount)}</p>
-              <p className="mt-1 text-sm text-slate-300">{TILON_DSTATION_ANALYSIS.totalCount}건</p>
+              <p className="mt-1 text-sm text-slate-300">{formatCount(TILON_DSTATION_ANALYSIS.totalCount)}개</p>
             </div>
           </div>
           <div className="grid gap-5 xl:grid-cols-2">
@@ -526,7 +522,7 @@ function App() {
               <MiniLineTrend rows={TILON_DSTATION_ANALYSIS.yearlySales} />
             </article>
             <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-              <h3 className="mb-3 text-sm font-bold text-white">Dstation 주요 수요기관 TOP 5</h3>
+              <h3 className="mb-3 text-sm font-bold text-white">Dstation 제품 규격별 매출</h3>
               <MiniBars rows={TILON_DSTATION_ANALYSIS.topBuyers} />
             </article>
           </div>
@@ -552,7 +548,7 @@ function App() {
                   <div className="text-right">
                     <p className="text-xs text-slate-400">VDI 누적 실적</p>
                     <p className="text-2xl font-black text-purple-200">{formatMoney(company.totalAmount)}</p>
-                    <p className="mt-1 text-xs text-slate-400">{company.totalCount}건</p>
+                    <p className="mt-1 text-xs text-slate-400">{formatCount(company.totalCount)}개</p>
                   </div>
                 </div>
                 <p className="mb-5 text-sm leading-6 text-slate-300">{company.summary}</p>
@@ -562,7 +558,7 @@ function App() {
                     <MiniBars rows={company.yearlySales} />
                   </div>
                   <div>
-                    <h4 className="mb-3 text-sm font-bold text-white">VDI 주요 수요기관</h4>
+                    <h4 className="mb-3 text-sm font-bold text-white">제품 규격별 매출</h4>
                     <MiniBars rows={company.topBuyers} />
                   </div>
                 </div>
@@ -586,7 +582,7 @@ function App() {
             ) : <EmptyState />}
           </ChartCard>
 
-          <ChartCard title="월별/연도별 조달 추이" subtitle="막대는 계약금액, 꺾은선은 계약 건수">
+          <ChartCard title="월별/연도별 조달 추이" subtitle="막대는 환산 매출, 꺾은선은 판매라이선스 수">
             {trendData.length ? (
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={trendData} margin={{ top: 8, right: 20, left: 8, bottom: 8 }}>
@@ -594,19 +590,19 @@ function App() {
                   <XAxis dataKey="month" stroke="#94a3b8" tick={{ fontSize: 11 }} />
                   <YAxis yAxisId="left" stroke="#94a3b8" tickFormatter={formatMoney} />
                   <YAxis yAxisId="right" orientation="right" stroke="#94a3b8" />
-                  <Tooltip contentStyle={{ background: "#020617", border: "1px solid #334155", borderRadius: 12 }} formatter={(value, name) => name === "amount" ? formatMoney(value) : `${value}건`} />
+                  <Tooltip contentStyle={{ background: "#020617", border: "1px solid #334155", borderRadius: 12 }} formatter={(value, name) => name === "amount" ? formatMoney(value) : `${formatCount(value)}개`} />
                   <Legend />
-                  <Bar yAxisId="left" dataKey="amount" name="계약금액" fill={PURPLE} radius={[8, 8, 0, 0]} />
-                  <Line yAxisId="right" type="monotone" dataKey="count" name="계약건수" stroke={CYAN} strokeWidth={3} dot={{ r: 4 }} />
+                  <Bar yAxisId="left" dataKey="amount" name="환산매출" fill={PURPLE} radius={[8, 8, 0, 0]} />
+                  <Line yAxisId="right" type="monotone" dataKey="count" name="판매라이선스" stroke={CYAN} strokeWidth={3} dot={{ r: 4 }} />
                 </ComposedChart>
               </ResponsiveContainer>
             ) : <EmptyState />}
           </ChartCard>
 
-          <ChartCard title="수요기관 TOP 10" subtitle="어디서 가장 많이 구매했는지 분석">
-            {buyerRanking.length ? (
+          <ChartCard title="제품 규격 TOP 10" subtitle="엑셀 가격표 기준 규격별 환산 매출">
+            {specRanking.length ? (
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={buyerRanking} layout="vertical" margin={{ top: 8, right: 24, left: 52, bottom: 8 }}>
+                <BarChart data={specRanking} layout="vertical" margin={{ top: 8, right: 24, left: 52, bottom: 8 }}>
                   <CartesianGrid stroke="#1e293b" horizontal={false} />
                   <XAxis type="number" stroke="#94a3b8" tickFormatter={formatMoney} />
                   <YAxis dataKey="name" type="category" stroke="#cbd5e1" width={126} tick={{ fontSize: 12 }} />
@@ -617,7 +613,7 @@ function App() {
             ) : <EmptyState />}
           </ChartCard>
 
-          <ChartCard title="품목/서비스별 비중" subtitle="제품군별 계약금액 비중">
+          <ChartCard title="품목/서비스별 비중" subtitle="제품군별 환산 매출 비중">
             {productShare.length ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -634,16 +630,16 @@ function App() {
 
         <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <KpiCard title="조회된 공급기업 수" value={`${formatCount(kpis.supplierCount)}개사`} helper="공급기업명 고유 개수" icon={Database} />
-          <KpiCard title="총 계약금액" value={formatMoney(kpis.totalAmount)} helper="filteredData 계약금액 합계" icon={TrendingUp} accent={PURPLE} />
-          <KpiCard title="총 계약 건수" value={`${formatCount(kpis.totalContracts)}건`} helper="계약 건수 합계" icon={ShieldCheck} accent={GREEN} />
-          <KpiCard title="평균 계약 단가" value={formatMoney(kpis.averageAmount)} helper="총 계약금액 / 총 계약 건수" icon={Database} accent={PINK} />
+          <KpiCard title="총 환산 매출" value={formatMoney(kpis.totalAmount)} helper="가격×판매라이선스 합계" icon={TrendingUp} accent={PURPLE} />
+          <KpiCard title="총 판매라이선스" value={`${formatCount(kpis.totalContracts)}개`} helper="연도별 판매라이선스 합계" icon={ShieldCheck} accent={GREEN} />
+          <KpiCard title="평균 라이선스 단가" value={formatMoney(kpis.averageAmount)} helper="총 환산 매출 / 총 판매라이선스" icon={Database} accent={PINK} />
         </section>
 
         <section className="mt-6 rounded-2xl border border-white/10 bg-slate-900/75 p-5 shadow-2xl shadow-black/20">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold text-white">세부 계약 데이터</h2>
-              <p className="mt-1 text-xs text-slate-400">filteredData 원본 행을 방어적으로 렌더링합니다.</p>
+              <h2 className="text-base font-bold text-white">엑셀 요약 데이터</h2>
+              <p className="mt-1 text-xs text-slate-400">DstationX 가격정하기.xlsx의 회사×연도별 환산 매출 요약입니다.</p>
             </div>
             <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-bold text-cyan-200">
               {formatCount(filteredData.length)} rows
@@ -653,14 +649,14 @@ function App() {
             <table className="min-w-[1100px] w-full border-collapse text-left text-sm">
               <thead className="sticky top-0 bg-slate-950 text-xs uppercase text-slate-400">
                 <tr>
-                  <th className="px-4 py-3">계약일자</th>
+                  <th className="px-4 py-3">기준일</th>
                   <th className="px-4 py-3">공급기업명</th>
                   <th className="px-4 py-3">제품/품목명</th>
                   <th className="px-4 py-3">제품군</th>
-                  <th className="px-4 py-3">수요기관명</th>
-                  <th className="px-4 py-3">계약명</th>
+                  <th className="px-4 py-3">정보</th>
+                  <th className="px-4 py-3">분석명</th>
                   <th className="px-4 py-3 text-right">금액</th>
-                  <th className="px-4 py-3">계약방법</th>
+                  <th className="px-4 py-3">산출기준</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10">

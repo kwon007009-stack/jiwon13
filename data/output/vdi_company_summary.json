@@ -1,101 +1,975 @@
 {
-  "basis": "사용자 검증값 및 엑셀 분석 요약",
+  "basis": "DstationX 가격정하기.xlsx 단가×판매라이선스 기반 재계산",
   "annualVerifiedSales": [
+    {
+      "year": 2021,
+      "label": "2021년 VDI 조달판매",
+      "totalAmount": 1401534000,
+      "basis": "DstationX 가격정하기.xlsx 단가×판매라이선스 기준",
+      "companies": [
+        {
+          "supplierName": "틸론",
+          "productName": "Dstation v9.0",
+          "amount": 1113950000,
+          "count": 2025,
+          "share": 79.48
+        },
+        {
+          "supplierName": "쓰리에스소프트",
+          "productName": "NEPYX NetDesktop",
+          "amount": 287584000,
+          "count": 608,
+          "share": 20.52
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "label": "2022년 VDI 조달판매",
+      "totalAmount": 754070000,
+      "basis": "DstationX 가격정하기.xlsx 단가×판매라이선스 기준",
+      "companies": [
+        {
+          "supplierName": "틸론",
+          "productName": "Dstation v9.0",
+          "amount": 754070000,
+          "count": 1373,
+          "share": 100
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "label": "2023년 VDI 조달판매",
+      "totalAmount": 1019640000,
+      "basis": "DstationX 가격정하기.xlsx 단가×판매라이선스 기준",
+      "companies": [
+        {
+          "supplierName": "틸론",
+          "productName": "Dstation v9.0",
+          "amount": 967610000,
+          "count": 1754,
+          "share": 94.9
+        },
+        {
+          "supplierName": "쓰리에스소프트",
+          "productName": "NEPYX NetDesktop",
+          "amount": 52030000,
+          "count": 110,
+          "share": 5.1
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "label": "2024년 VDI 조달판매",
+      "totalAmount": 6119229000,
+      "basis": "DstationX 가격정하기.xlsx 단가×판매라이선스 기준",
+      "companies": [
+        {
+          "supplierName": "틸론",
+          "productName": "Dstation v9.0",
+          "amount": 5569920000,
+          "count": 10298,
+          "share": 91.02
+        },
+        {
+          "supplierName": "이트론",
+          "productName": "JDesktop Enterprise v7.0",
+          "amount": 377610000,
+          "count": 713,
+          "share": 6.17
+        },
+        {
+          "supplierName": "쓰리에스소프트",
+          "productName": "NEPYX NetDesktop",
+          "amount": 171699000,
+          "count": 363,
+          "share": 2.81
+        }
+      ]
+    },
     {
       "year": 2025,
       "label": "2025년 VDI 조달판매",
-      "totalAmount": 2949260200,
-      "basis": "연간 확정 기준",
+      "totalAmount": 3189410000,
+      "basis": "DstationX 가격정하기.xlsx 단가×판매라이선스 기준",
       "companies": [
-        { "supplierName": "틸론", "productName": "Dstation X", "amount": 2221530200, "share": 75.32, "count": 33 },
-        { "supplierName": "쓰리에스소프트", "productName": "NEPYX NetDesktop", "amount": 477730000, "share": 16.2, "count": 4 },
-        { "supplierName": "소만사", "productName": "VD-i", "amount": 250000000, "share": 8.48, "count": 1 }
+        {
+          "supplierName": "틸론",
+          "productName": "Dstation v9.0",
+          "amount": 2053220000,
+          "count": 3763,
+          "share": 64.38
+        },
+        {
+          "supplierName": "쓰리에스소프트",
+          "productName": "NEPYX NetDesktop",
+          "amount": 477730000,
+          "count": 1010,
+          "share": 14.98
+        },
+        {
+          "supplierName": "이트론",
+          "productName": "JDesktop Enterprise v7.0",
+          "amount": 408460000,
+          "count": 778,
+          "share": 12.81
+        },
+        {
+          "supplierName": "소만사",
+          "productName": "VD-I v2.0",
+          "amount": 250000000,
+          "count": 100,
+          "share": 7.84
+        }
       ]
     },
     {
       "year": 2026,
       "label": "2026년 VDI 조달판매",
-      "totalAmount": 1072385000,
-      "basis": "2026년 8월 현재 기준",
+      "totalAmount": 963045000,
+      "basis": "DstationX 가격정하기.xlsx 단가×판매라이선스 기준",
       "companies": [
-        { "supplierName": "틸론", "productName": "Dstation", "amount": 720000000, "share": 67.14, "count": 13 },
-        { "supplierName": "쓰리에스소프트", "productName": "NEPYX NetDesktop", "amount": 352385000, "share": 32.86, "count": 2 }
+        {
+          "supplierName": "틸론",
+          "productName": "Dstation v9.0",
+          "amount": 586160000,
+          "count": 1074,
+          "share": 60.87
+        },
+        {
+          "supplierName": "쓰리에스소프트",
+          "productName": "NEPYX NetDesktop",
+          "amount": 352385000,
+          "count": 745,
+          "share": 36.59
+        },
+        {
+          "supplierName": "엔컴퓨팅",
+          "productName": "VERDE VDI 8.3 Enterprise Edition",
+          "amount": 24500000,
+          "count": 50,
+          "share": 2.54
+        }
       ]
     }
   ],
   "fiveYearVdiRanking": {
-    "periodLabel": "최근 5개년(2021.08~2026.08)",
-    "basis": "사용자 제공 틸론 5개년 엑셀 + 경쟁사 VDI 전용 검증 요약. 개인정보보호·망연계 등 비VDI 매출 제외.",
-    "totalAmount": 12750021800,
+    "periodLabel": "2021~2026 엑셀 기준",
+    "basis": "DstationX 가격정하기.xlsx의 가격×연도별 판매라이선스 수량 기준. 수요기관 정보는 포함되지 않음.",
+    "totalAmount": 13446928000,
+    "totalCount": 24764,
     "companies": [
-      { "supplierName": "틸론", "productName": "Dstation", "amount": 11460021800, "share": 89.88, "count": 118 },
-      { "supplierName": "쓰리에스소프트", "productName": "NEPYX NetDesktop", "amount": 1040000000, "share": 8.16, "count": 12 },
-      { "supplierName": "소만사", "productName": "VD-i", "amount": 250000000, "share": 1.96, "count": 1 }
+      {
+        "supplierName": "틸론",
+        "productName": "Dstation v9.0",
+        "amount": 11044930000,
+        "share": 82.14,
+        "count": 20287
+      },
+      {
+        "supplierName": "쓰리에스소프트",
+        "productName": "NEPYX NetDesktop",
+        "amount": 1341428000,
+        "share": 9.98,
+        "count": 2836
+      },
+      {
+        "supplierName": "이트론",
+        "productName": "JDesktop Enterprise v7.0",
+        "amount": 786070000,
+        "share": 5.85,
+        "count": 1491
+      },
+      {
+        "supplierName": "소만사",
+        "productName": "VD-I v2.0",
+        "amount": 250000000,
+        "share": 1.86,
+        "count": 100
+      },
+      {
+        "supplierName": "엔컴퓨팅",
+        "productName": "VERDE VDI 8.3 Enterprise Edition",
+        "amount": 24500000,
+        "share": 0.18,
+        "count": 50
+      },
+      {
+        "supplierName": "아홉랩",
+        "productName": "V-Spacer Desktop V1.2",
+        "amount": 0,
+        "share": 0,
+        "count": 0
+      },
+      {
+        "supplierName": "유플렉스소프트",
+        "productName": "All-In-One DV 5.0",
+        "amount": 0,
+        "share": 0,
+        "count": 0
+      },
+      {
+        "supplierName": "에스피소프트",
+        "productName": "gDaaS v2.0",
+        "amount": 0,
+        "share": 0,
+        "count": 0
+      }
     ]
   },
   "tilonDstation": {
     "company": "틸론",
-    "product": "Dstation",
-    "periodLabel": "최근 5개년",
-    "totalAmount": 11460021800,
-    "totalCount": 118,
-    "summary": "사용자 제공 5개년 엑셀 기준, 틸론은 Dstation/VDI 조달 납품에서 총 114.6억 원, 118건을 기록했습니다. 동일 VDI 전용 검증 기준의 주요 경쟁사 대비 누적 매출 1위입니다.",
+    "product": "Dstation v9.0",
+    "periodLabel": "2021~2026 엑셀 기준",
+    "totalAmount": 11044930000,
+    "totalCount": 20287,
+    "summary": "DstationX 가격정하기.xlsx 기준, 틸론은 Dstation v9.0 판매라이선스 20,287개와 환산 매출 110.4억을 기록했습니다. 동일 엑셀 내 비교 대상사 대비 누적 매출 1위입니다.",
     "yearlySales": [
-      { "period": "2021.08~2022.08", "amount": 1838520000, "count": 27 },
-      { "period": "2022.08~2023.08", "amount": 320400000, "count": 11 },
-      { "period": "2023.08~2024.08", "amount": 5987330000, "count": 23 },
-      { "period": "2024.08~2025.08", "amount": 1017850000, "count": 20 },
-      { "period": "2025.08~2026.08", "amount": 2295921800, "count": 37 }
+      {
+        "period": "2021년",
+        "amount": 1113950000,
+        "count": 2025
+      },
+      {
+        "period": "2022년",
+        "amount": 754070000,
+        "count": 1373
+      },
+      {
+        "period": "2023년",
+        "amount": 967610000,
+        "count": 1754
+      },
+      {
+        "period": "2024년",
+        "amount": 5569920000,
+        "count": 10298
+      },
+      {
+        "period": "2025년",
+        "amount": 2053220000,
+        "count": 3763
+      },
+      {
+        "period": "2026년",
+        "amount": 586160000,
+        "count": 1074
+      }
     ],
     "topBuyers": [
-      { "name": "제주대학교", "amount": 2616840000 },
-      { "name": "근로복지공단본부", "amount": 1731780000 },
-      { "name": "한국산업인력공단", "amount": 759580000 },
-      { "name": "한국장애인고용공단", "amount": 712800000 },
-      { "name": "한국주택금융공사", "amount": 550800000 }
+      {
+        "name": "Dstation v9.0 / 100유저 이상",
+        "amount": 9983520000,
+        "count": 18488
+      },
+      {
+        "name": "Dstation v9.0 / 1~99유저",
+        "amount": 1061410000,
+        "count": 1799
+      }
     ]
   },
   "competitorAnalysis": [
     {
-      "company": "소만사",
-      "product": "VD-i",
-      "periodLabel": "최근 3개년",
-      "totalAmount": 250000000,
-      "totalCount": 1,
-      "summary": "VDI 시장 내 실적은 미미하나, 고위험/보안 필수 기관인 경찰청을 단일 타겟팅한 납품 실적이 확인됩니다.",
+      "company": "쓰리에스소프트",
+      "product": "NEPYX NetDesktop",
+      "periodLabel": "2021~2026 엑셀 기준",
+      "totalAmount": 1341428000,
+      "totalCount": 2836,
+      "summary": "쓰리에스소프트는 NEPYX NetDesktop 기준 판매라이선스 2,836개, 환산 매출 13.4억입니다. 엑셀 기준 누적 점유율은 9.98%입니다.",
       "yearlySales": [
-        { "period": "2023.08~2024.08", "amount": null, "count": 0, "unknown": false },
-        { "period": "2024.08~2025.08", "amount": null, "count": 0, "unknown": false },
-        { "period": "2025.08~2026.08", "amount": 250000000, "count": 1 }
+        {
+          "period": "2021년",
+          "amount": 287584000,
+          "count": 608
+        },
+        {
+          "period": "2022년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2023년",
+          "amount": 52030000,
+          "count": 110
+        },
+        {
+          "period": "2024년",
+          "amount": 171699000,
+          "count": 363
+        },
+        {
+          "period": "2025년",
+          "amount": 477730000,
+          "count": 1010
+        },
+        {
+          "period": "2026년",
+          "amount": 352385000,
+          "count": 745
+        }
       ],
       "topBuyers": [
-        { "name": "경찰청", "amount": 250000000, "count": 1 }
+        {
+          "name": "NEPYX NetDesktop / 1User",
+          "amount": 1341428000,
+          "count": 2836
+        }
       ]
+    },
+    {
+      "company": "이트론",
+      "product": "JDesktop Enterprise v7.0",
+      "periodLabel": "2021~2026 엑셀 기준",
+      "totalAmount": 786070000,
+      "totalCount": 1491,
+      "summary": "이트론는 JDesktop Enterprise v7.0 기준 판매라이선스 1,491개, 환산 매출 7.9억입니다. 엑셀 기준 누적 점유율은 5.85%입니다.",
+      "yearlySales": [
+        {
+          "period": "2021년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2022년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2023년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2024년",
+          "amount": 377610000,
+          "count": 713
+        },
+        {
+          "period": "2025년",
+          "amount": 408460000,
+          "count": 778
+        },
+        {
+          "period": "2026년",
+          "amount": null,
+          "count": 0
+        }
+      ],
+      "topBuyers": [
+        {
+          "name": "JDesktop Enterprise v7.0 / 100유저 이상",
+          "amount": 663520000,
+          "count": 1276
+        },
+        {
+          "name": "JDesktop Enterprise v7.0 / 1~99유저",
+          "amount": 122550000,
+          "count": 215
+        }
+      ]
+    },
+    {
+      "company": "소만사",
+      "product": "VD-I v2.0",
+      "periodLabel": "2021~2026 엑셀 기준",
+      "totalAmount": 250000000,
+      "totalCount": 100,
+      "summary": "소만사는 VD-I v2.0 기준 판매라이선스 100개, 환산 매출 2.5억입니다. 엑셀 기준 누적 점유율은 1.86%입니다.",
+      "yearlySales": [
+        {
+          "period": "2021년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2022년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2023년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2024년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2025년",
+          "amount": 250000000,
+          "count": 100
+        },
+        {
+          "period": "2026년",
+          "amount": null,
+          "count": 0
+        }
+      ],
+      "topBuyers": [
+        {
+          "name": "VD-I v2.0 / 1User 퍼포먼스",
+          "amount": 250000000,
+          "count": 100
+        },
+        {
+          "name": "VD-I v2.0 / 1user 라이트",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "name": "VD-I v2.0 / 1user 프리미엄",
+          "amount": null,
+          "count": 0
+        }
+      ]
+    },
+    {
+      "company": "엔컴퓨팅",
+      "product": "VERDE VDI 8.3 Enterprise Edition",
+      "periodLabel": "2021~2026 엑셀 기준",
+      "totalAmount": 24500000,
+      "totalCount": 50,
+      "summary": "엔컴퓨팅는 VERDE VDI 8.3 Enterprise Edition 기준 판매라이선스 50개, 환산 매출 0.2억입니다. 엑셀 기준 누적 점유율은 0.18%입니다.",
+      "yearlySales": [
+        {
+          "period": "2021년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2022년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2023년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2024년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2025년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2026년",
+          "amount": 24500000,
+          "count": 50
+        }
+      ],
+      "topBuyers": [
+        {
+          "name": "VERDE VDI 8.3 Enterprise Edition / 1User",
+          "amount": 24500000,
+          "count": 50
+        }
+      ]
+    },
+    {
+      "company": "아홉랩",
+      "product": "V-Spacer Desktop V1.2",
+      "periodLabel": "2021~2026 엑셀 기준",
+      "totalAmount": 0,
+      "totalCount": 0,
+      "summary": "아홉랩는 제품과 가격 정보는 등록되어 있으나, 2021~2026 연도별 판매라이선스 값은 입력되어 있지 않습니다.",
+      "yearlySales": [
+        {
+          "period": "2021년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2022년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2023년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2024년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2025년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2026년",
+          "amount": null,
+          "count": 0
+        }
+      ],
+      "topBuyers": [
+        {
+          "name": "V-Spacer Desktop V1.2 / 1User, Client",
+          "amount": null,
+          "count": 0
+        }
+      ]
+    },
+    {
+      "company": "유플렉스소프트",
+      "product": "All-In-One DV 5.0",
+      "periodLabel": "2021~2026 엑셀 기준",
+      "totalAmount": 0,
+      "totalCount": 0,
+      "summary": "유플렉스소프트는 제품과 가격 정보는 등록되어 있으나, 2021~2026 연도별 판매라이선스 값은 입력되어 있지 않습니다.",
+      "yearlySales": [
+        {
+          "period": "2021년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2022년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2023년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2024년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2025년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2026년",
+          "amount": null,
+          "count": 0
+        }
+      ],
+      "topBuyers": [
+        {
+          "name": "All-In-One DV 5.0 / 100User 이상",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "name": "All-In-One DV 5.0 / Standard",
+          "amount": null,
+          "count": 0
+        }
+      ]
+    },
+    {
+      "company": "에스피소프트",
+      "product": "gDaaS v2.0",
+      "periodLabel": "2021~2026 엑셀 기준",
+      "totalAmount": 0,
+      "totalCount": 0,
+      "summary": "에스피소프트는 제품과 가격 정보는 등록되어 있으나, 2021~2026 연도별 판매라이선스 값은 입력되어 있지 않습니다.",
+      "yearlySales": [
+        {
+          "period": "2021년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2022년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2023년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2024년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2025년",
+          "amount": null,
+          "count": 0
+        },
+        {
+          "period": "2026년",
+          "amount": null,
+          "count": 0
+        }
+      ],
+      "topBuyers": [
+        {
+          "name": "gDaaS v2.0 / 1User",
+          "amount": null,
+          "count": 0
+        }
+      ]
+    }
+  ],
+  "unverifiedCompanies": [
+    "아홉랩",
+    "유플렉스소프트",
+    "에스피소프트"
+  ],
+  "sourceRows": [
+    {
+      "company": "틸론",
+      "product": "Dstation v9.0",
+      "itemId": "24269256",
+      "category": "보안가상화",
+      "spec": "100유저 이상",
+      "unitPrice": 540000,
+      "yearlyQty": {
+        "2021": 1616,
+        "2022": 1120,
+        "2023": 1345,
+        "2024": 10118,
+        "2025": 3339,
+        "2026": 950
+      },
+      "yearlyAmount": {
+        "2021": 872640000,
+        "2022": 604800000,
+        "2023": 726300000,
+        "2024": 5463720000,
+        "2025": 1803060000,
+        "2026": 513000000
+      },
+      "yearlyQtySum": 18488,
+      "statedQtyTotal": 18488
+    },
+    {
+      "company": "틸론",
+      "product": "Dstation v9.0",
+      "itemId": "24269255",
+      "category": "보안가상화",
+      "spec": "1~99유저",
+      "unitPrice": 590000,
+      "yearlyQty": {
+        "2021": 409,
+        "2022": 253,
+        "2023": 409,
+        "2024": 180,
+        "2025": 424,
+        "2026": 124
+      },
+      "yearlyAmount": {
+        "2021": 241310000,
+        "2022": 149270000,
+        "2023": 241310000,
+        "2024": 106200000,
+        "2025": 250160000,
+        "2026": 73160000
+      },
+      "yearlyQtySum": 1799,
+      "statedQtyTotal": 1799
     },
     {
       "company": "쓰리에스소프트",
       "product": "NEPYX NetDesktop",
-      "periodLabel": "최근 4개년",
-      "totalAmount": 1040000000,
-      "totalCount": 12,
-      "summary": "틸론을 추격하는 실질적인 위협입니다. 최근 2년간 VDI 매출이 400% 이상 성장하며 연구기관·환경기관 중심으로 빠르게 확대되고 있습니다.",
-      "yearlySales": [
-        { "period": "2022.08~2023.08", "amount": 4000000, "count": 1 },
-        { "period": "2023.08~2024.08", "amount": 140000000, "count": 2 },
-        { "period": "2024.08~2025.08", "amount": 310000000, "count": 5 },
-        { "period": "2025.08~2026.08", "amount": 580000000, "count": 4 }
-      ],
-      "topBuyers": [
-        { "name": "한국과학기술정보연구원(KISTI)", "amount": 468000000 },
-        { "name": "한국환경산업기술원", "amount": 290000000 },
-        { "name": "국세청", "amount": 94000000 }
-      ]
+      "itemId": "24613909",
+      "category": "보안가상화",
+      "spec": "1User",
+      "unitPrice": 473000,
+      "yearlyQty": {
+        "2021": 608,
+        "2022": 0,
+        "2023": 110,
+        "2024": 363,
+        "2025": 1010,
+        "2026": 745
+      },
+      "yearlyAmount": {
+        "2021": 287584000,
+        "2022": 0,
+        "2023": 52030000,
+        "2024": 171699000,
+        "2025": 477730000,
+        "2026": 352385000
+      },
+      "yearlyQtySum": 2836,
+      "statedQtyTotal": 3276
+    },
+    {
+      "company": "소만사",
+      "product": "VD-I v2.0",
+      "itemId": "24616486",
+      "category": "보안가상화",
+      "spec": "1user 라이트",
+      "unitPrice": 340000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyQtySum": 0,
+      "statedQtyTotal": 0
+    },
+    {
+      "company": "소만사",
+      "product": "VD-I v2.0",
+      "itemId": "24616487",
+      "category": "보안가상화",
+      "spec": "1user 프리미엄",
+      "unitPrice": 1200000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyQtySum": 0,
+      "statedQtyTotal": 0
+    },
+    {
+      "company": "소만사",
+      "product": "VD-I v2.0",
+      "itemId": "24616488",
+      "category": "보안가상화",
+      "spec": "1User 퍼포먼스",
+      "unitPrice": 2500000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 100,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 250000000,
+        "2026": 0
+      },
+      "yearlyQtySum": 100,
+      "statedQtyTotal": 100
+    },
+    {
+      "company": "이트론",
+      "product": "JDesktop Enterprise v7.0",
+      "itemId": "24567878",
+      "category": "데스크탑가상화",
+      "spec": "100유저 이상",
+      "unitPrice": 520000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 576,
+        "2025": 700,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 299520000,
+        "2025": 364000000,
+        "2026": 0
+      },
+      "yearlyQtySum": 1276,
+      "statedQtyTotal": 1276
+    },
+    {
+      "company": "이트론",
+      "product": "JDesktop Enterprise v7.0",
+      "itemId": "24567877",
+      "category": "데스크탑가상화",
+      "spec": "1~99유저",
+      "unitPrice": 570000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 137,
+        "2025": 78,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 78090000,
+        "2025": 44460000,
+        "2026": 0
+      },
+      "yearlyQtySum": 215,
+      "statedQtyTotal": 215
+    },
+    {
+      "company": "아홉랩",
+      "product": "V-Spacer Desktop V1.2",
+      "itemId": "25302093",
+      "category": "보안가상화",
+      "spec": "1User, Client",
+      "unitPrice": 330000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyQtySum": 0,
+      "statedQtyTotal": 0
+    },
+    {
+      "company": "엔컴퓨팅",
+      "product": "VERDE VDI 8.3 Enterprise Edition",
+      "itemId": "24983650",
+      "category": "데스크탑가상화",
+      "spec": "1User",
+      "unitPrice": 490000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 50
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 24500000
+      },
+      "yearlyQtySum": 50,
+      "statedQtyTotal": 50
+    },
+    {
+      "company": "유플렉스소프트",
+      "product": "All-In-One DV 5.0",
+      "itemId": "25769417",
+      "category": "데스크탑가상화",
+      "spec": "100User 이상",
+      "unitPrice": 472000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyQtySum": 0,
+      "statedQtyTotal": 0
+    },
+    {
+      "company": "유플렉스소프트",
+      "product": "All-In-One DV 5.0",
+      "itemId": "25744755",
+      "category": "데스크탑가상화",
+      "spec": "Standard",
+      "unitPrice": 500000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyQtySum": 0,
+      "statedQtyTotal": 0
+    },
+    {
+      "company": "에스피소프트",
+      "product": "gDaaS v2.0",
+      "itemId": "25373644",
+      "category": "보안소프트웨어",
+      "spec": "1User",
+      "unitPrice": 506000,
+      "yearlyQty": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyAmount": {
+        "2021": 0,
+        "2022": 0,
+        "2023": 0,
+        "2024": 0,
+        "2025": 0,
+        "2026": 0
+      },
+      "yearlyQtySum": 0,
+      "statedQtyTotal": 0
     }
   ],
-  "unverifiedCompanies": ["이트론", "엔컴퓨팅", "에스피소프트"],
   "validationNotes": [
-    "2021~2024 전체 6개사 API 원천자료는 아직 미수집",
-    "2026년 값은 조회 기준일에 따라 기존 6월 22일 기준값과 차이가 발생 가능",
-    "검증되지 않은 회사는 0원이 아니라 미확인으로 처리"
+    "쓰리에스소프트 NEPYX NetDesktop 1User: 판매수량 합계 3,276개와 연도별 합 2,836개가 불일치하여 연도별 합 기준으로 계산",
+    "엑셀에 수요기관/계약일자 원천 행이 없어 기관 TOP 분석은 제품 규격별 매출로 대체",
+    "금액은 엑셀의 가격×연도별 판매라이선스 수량으로 산출"
   ]
 }
