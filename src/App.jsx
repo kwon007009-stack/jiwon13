@@ -11,7 +11,6 @@ import {
   Pie,
   PieChart,
   ResponsiveContainer,
-  Sector,
   Tooltip,
   XAxis,
   YAxis
@@ -307,23 +306,6 @@ function MiniLineTrend({ rows }) {
   );
 }
 
-function renderLeaderSlice(props) {
-  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
-  return (
-    <Sector
-      cx={cx}
-      cy={cy}
-      innerRadius={Math.max(0, innerRadius - 6)}
-      outerRadius={outerRadius + 14}
-      startAngle={startAngle}
-      endAngle={endAngle}
-      fill={fill}
-      stroke="#ffffff"
-      strokeWidth={3}
-    />
-  );
-}
-
 function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
   const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
@@ -384,10 +366,6 @@ function App() {
       isLeader: searchableText(company.productName).includes("dstation")
     })).filter(company => company.amount > 0 || company.count > 0) ?? [],
     [selectedAnnualSummary]
-  );
-  const annualLeaderIndex = useMemo(
-    () => annualShareData.findIndex(company => company.isLeader),
-    [annualShareData]
   );
 
   return (
@@ -503,8 +481,6 @@ function App() {
                       innerRadius={82}
                       outerRadius={132}
                       paddingAngle={3}
-                      activeIndex={annualLeaderIndex}
-                      activeShape={renderLeaderSlice}
                     >
                       {annualShareData.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
                     </Pie>
