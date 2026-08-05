@@ -433,11 +433,11 @@ function App() {
               <div className="overflow-hidden rounded-xl border border-white/10">
                 <table className="w-full table-fixed border-collapse text-sm">
                   <colgroup>
-                    <col className="w-[21%]" />
-                    <col className="w-[39%]" />
+                    <col className="w-[19%]" />
+                    <col className="w-[35%]" />
                     <col className="w-[20%]" />
-                    <col className="w-[10%]" />
-                    <col className="w-[10%]" />
+                    <col className="w-[11%]" />
+                    <col className="w-[15%]" />
                   </colgroup>
                   <thead className="bg-slate-950/70 text-xs text-slate-400">
                     <tr>
@@ -445,19 +445,25 @@ function App() {
                       <th className="px-3 py-2 text-left">제품명</th>
                       <th className="px-3 py-2 text-right">금액</th>
                       <th className="px-3 py-2 text-right">점유율</th>
-                      <th className="px-3 py-2 text-right">라이선스</th>
+                      <th className="whitespace-nowrap px-3 py-2 text-right">라이선스</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/10">
-                    {selectedAnnualSummary?.companies?.map(company => (
-                      <tr key={`${selectedAnnualSummary.year}-${company.supplierName}`} className={company.supplierName === "틸론" ? "bg-cyan-300/10" : ""}>
-                        <td className="truncate px-3 py-2 font-bold text-white">{company.supplierName}</td>
-                        <td className="truncate px-3 py-2 text-cyan-100">{company.productName}</td>
-                        <td className="px-3 py-2 text-right text-slate-200">{company.amount.toLocaleString("ko-KR")}원</td>
-                        <td className="px-3 py-2 text-right font-bold text-cyan-200">{company.share.toFixed(2)}%</td>
-                        <td className="px-3 py-2 text-right text-slate-300">{formatCount(company.count)}개</td>
+                    {selectedAnnualSummary?.companies?.map(company => {
+                      const isTilon = company.supplierName === "틸론";
+                      return (
+                      <tr
+                        key={`${selectedAnnualSummary.year}-${company.supplierName}`}
+                        className={isTilon ? "bg-cyan-300/15 text-[15px] shadow-[inset_4px_0_0_#0891b2]" : ""}
+                      >
+                        <td className={`truncate px-3 ${isTilon ? "py-3 font-black" : "py-2 font-bold"} text-white`}>{company.supplierName}</td>
+                        <td className={`truncate px-3 ${isTilon ? "py-3 font-bold" : "py-2"} text-cyan-100`}>{company.productName}</td>
+                        <td className={`whitespace-nowrap px-3 ${isTilon ? "py-3 font-black" : "py-2"} text-right text-slate-200`}>{company.amount.toLocaleString("ko-KR")}원</td>
+                        <td className={`whitespace-nowrap px-3 ${isTilon ? "py-3 text-base" : "py-2"} text-right font-bold text-cyan-200`}>{company.share.toFixed(2)}%</td>
+                        <td className={`whitespace-nowrap px-3 ${isTilon ? "py-3 font-black" : "py-2"} text-right text-slate-300`}>{formatCount(company.count)}개</td>
                       </tr>
-                    ))}
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
