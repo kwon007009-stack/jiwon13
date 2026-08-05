@@ -476,7 +476,7 @@ function DstationSpecCard({ rows }) {
 
 function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
-  const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
+  const [selectedAnnualYear, setSelectedAnnualYear] = useState(ALL_YEARS_OPTION);
   const [selectedCompetitor, setSelectedCompetitor] = useState(EXCEL_COMPETITOR_ANALYSIS[0]?.company ?? "");
 
   useEffect(() => {
