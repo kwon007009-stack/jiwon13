@@ -475,31 +475,23 @@ function App() {
                     <Pie data={annualShareData} dataKey="amount" nameKey="name" innerRadius={54} outerRadius={92} paddingAngle={3}>
                       {annualShareData.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
                     </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        background: "#ffffff",
+                        border: "1px solid #cbd5e1",
+                        borderRadius: 12,
+                        color: "#0f172a",
+                        boxShadow: "0 14px 30px rgba(15,23,42,0.14)"
+                      }}
+                      labelStyle={{ color: "#0f172a", fontWeight: 900 }}
+                      formatter={(value, _name, item) => [
+                        `${formatMoney(value)} / ${safeNumber(item?.payload?.share).toFixed(2)}%`,
+                        item?.payload?.name ?? "공급기업"
+                      ]}
+                    />
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>
-              </div>
-              <div className="mt-3 space-y-2">
-                {annualShareData.map((company, index) => (
-                  <div key={company.name} className="rounded-xl bg-white/[0.03] px-3 py-2 text-xs">
-                    <div className="mb-2 flex items-center justify-between gap-3">
-                      <span className="flex min-w-0 items-center gap-2 font-bold text-white">
-                        <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
-                        <span className="truncate">{company.name}</span>
-                      </span>
-                      <span className="shrink-0 text-cyan-200">{company.share.toFixed(2)}%</span>
-                    </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-slate-800">
-                      <div
-                        className="h-full rounded-full"
-                        style={{
-                          width: `${Math.max(3, Math.min(100, company.share))}%`,
-                          backgroundColor: CHART_COLORS[index % CHART_COLORS.length]
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
               </div>
             </article>
           </div>
