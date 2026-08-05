@@ -77,7 +77,6 @@ const annualVerifiedSales = years.map(year => {
       amount: company.yearly.find(row => row.year === year)?.amount ?? 0,
       count: company.yearly.find(row => row.year === year)?.qty ?? 0
     }))
-    .filter(company => company.amount > 0 || company.count > 0)
     .sort((a, b) => b.amount - a.amount || b.count - a.count);
   const yearTotalAmount = companiesForYear.reduce((sum, company) => sum + company.amount, 0);
 

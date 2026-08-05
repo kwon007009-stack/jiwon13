@@ -20,6 +20,48 @@
           "amount": 287584000,
           "count": 608,
           "share": 20.52
+        },
+        {
+          "supplierName": "소만사",
+          "productName": "VD-I v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "이트론",
+          "productName": "JDesktop Enterprise v7.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "아홉랩",
+          "productName": "V-Spacer Desktop V1.2",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "엔컴퓨팅",
+          "productName": "VERDE VDI 8.3 Enterprise Edition",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "유플렉스소프트",
+          "productName": "All-In-One DV 5.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "에스피소프트",
+          "productName": "gDaaS v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
         }
       ]
     },
@@ -35,6 +77,55 @@
           "amount": 754070000,
           "count": 1373,
           "share": 100
+        },
+        {
+          "supplierName": "쓰리에스소프트",
+          "productName": "NEPYX NetDesktop",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "소만사",
+          "productName": "VD-I v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "이트론",
+          "productName": "JDesktop Enterprise v7.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "아홉랩",
+          "productName": "V-Spacer Desktop V1.2",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "엔컴퓨팅",
+          "productName": "VERDE VDI 8.3 Enterprise Edition",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "유플렉스소프트",
+          "productName": "All-In-One DV 5.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "에스피소프트",
+          "productName": "gDaaS v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
         }
       ]
     },
@@ -57,6 +148,48 @@
           "amount": 52030000,
           "count": 110,
           "share": 5.1
+        },
+        {
+          "supplierName": "소만사",
+          "productName": "VD-I v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "이트론",
+          "productName": "JDesktop Enterprise v7.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "아홉랩",
+          "productName": "V-Spacer Desktop V1.2",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "엔컴퓨팅",
+          "productName": "VERDE VDI 8.3 Enterprise Edition",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "유플렉스소프트",
+          "productName": "All-In-One DV 5.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "에스피소프트",
+          "productName": "gDaaS v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
         }
       ]
     },
@@ -86,6 +219,41 @@
           "amount": 171699000,
           "count": 363,
           "share": 2.81
+        },
+        {
+          "supplierName": "소만사",
+          "productName": "VD-I v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "아홉랩",
+          "productName": "V-Spacer Desktop V1.2",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "엔컴퓨팅",
+          "productName": "VERDE VDI 8.3 Enterprise Edition",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "유플렉스소프트",
+          "productName": "All-In-One DV 5.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "에스피소프트",
+          "productName": "gDaaS v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
         }
       ]
     },
@@ -122,6 +290,34 @@
           "amount": 250000000,
           "count": 100,
           "share": 7.84
+        },
+        {
+          "supplierName": "아홉랩",
+          "productName": "V-Spacer Desktop V1.2",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "엔컴퓨팅",
+          "productName": "VERDE VDI 8.3 Enterprise Edition",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "유플렉스소프트",
+          "productName": "All-In-One DV 5.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "에스피소프트",
+          "productName": "gDaaS v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
         }
       ]
     },
@@ -151,6 +347,41 @@
           "amount": 24500000,
           "count": 50,
           "share": 2.54
+        },
+        {
+          "supplierName": "소만사",
+          "productName": "VD-I v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "이트론",
+          "productName": "JDesktop Enterprise v7.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "아홉랩",
+          "productName": "V-Spacer Desktop V1.2",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "유플렉스소프트",
+          "productName": "All-In-One DV 5.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
+        },
+        {
+          "supplierName": "에스피소프트",
+          "productName": "gDaaS v2.0",
+          "amount": 0,
+          "count": 0,
+          "share": 0
         }
       ]
     }
