@@ -15,7 +15,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { Database, ShieldCheck, Trophy, TrendingUp } from "lucide-react";
+import { Database, ShieldCheck, TrendingUp } from "lucide-react";
 import productDictionary from "../data/dictionary/vdi_product_dictionary.json";
 import companySummary from "../data/output/vdi_company_summary.json";
 
@@ -62,6 +62,20 @@ const DSTATION_HERO_METRICS = {
   smallRevenue: 1060000000,
   totalRevenue: 11040000000
 };
+
+function TilonMark({ className = "" }) {
+  return (
+    <span
+      className={`grid shrink-0 grid-cols-2 gap-1.5 rounded-md bg-white/70 p-1 shadow-sm ring-1 ring-slate-200 ${className}`}
+      aria-hidden="true"
+    >
+      <span className="rounded-full bg-orange-500" />
+      <span className="rounded-full bg-yellow-400" />
+      <span className="rounded-full bg-sky-700" />
+      <span className="rounded-full bg-emerald-600" />
+    </span>
+  );
+}
 
 function splitAmount(totalAmount, count) {
   const base = Math.floor(totalAmount / count);
@@ -518,24 +532,16 @@ function App() {
           </p>
         </div>
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 shadow-2xl shadow-black/20">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-cyan-300/20 bg-white/70 px-6 py-5">
-            <div>
+          <div className="mb-5 rounded-2xl border border-cyan-300/20 bg-white/70 px-6 py-5">
+            <div className="ml-4 space-y-2">
               <p className="flex items-center gap-3 text-xl font-black text-slate-950">
-                <span className="grid h-10 w-10 shrink-0 grid-cols-2 gap-1.5 rounded-md bg-white/70 p-1 shadow-sm ring-1 ring-slate-200" aria-hidden="true">
-                  <span className="rounded-full bg-orange-500" />
-                  <span className="rounded-full bg-yellow-400" />
-                  <span className="rounded-full bg-sky-700" />
-                  <span className="rounded-full bg-emerald-600" />
-                </span>
+                <TilonMark className="h-8 w-8" />
                 <span>틸론 <span className="text-slate-600">{DSTATION_HERO_METRICS.product}</span></span>
               </p>
-              <h2 className="mt-2 text-2xl font-black leading-tight tracking-tight text-slate-950 md:text-3xl">
+              <h2 className="flex items-center gap-3 text-2xl font-black leading-tight tracking-tight text-slate-950 md:text-3xl">
+                <TilonMark className="h-8 w-8" />
                 공공조달 VDI <span className="text-sky-700">누적 판매실적 1위</span>
               </h2>
-            </div>
-            <div className="flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-amber-500 shadow-sm ring-1 ring-sky-100">
-              <Trophy size={34} aria-hidden="true" />
-              <p className="text-5xl font-black tracking-tight">No.1</p>
             </div>
           </div>
 
