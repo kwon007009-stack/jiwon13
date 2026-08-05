@@ -397,6 +397,36 @@ function App() {
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
           <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
             <div>
+              <p className="text-xs font-bold uppercase tracking-wide text-cyan-200">{TILON_DSTATION_ANALYSIS.periodLabel}</p>
+              <h2 className="mt-1 text-xl font-black text-white">
+                틸론 <span className="text-sm font-bold text-slate-300">({TILON_DSTATION_ANALYSIS.product}) 공공조달 핵심 실적</span>
+              </h2>
+              <div className="mt-3 inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-black text-cyan-200">
+                최근 5개년 VDI 조달 누적 매출 1위
+              </div>
+              <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">{TILON_DSTATION_ANALYSIS.summary}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-slate-400">5개년 Dstation 누적 실적</p>
+              <p className="text-3xl font-black text-cyan-100">{formatMoney(TILON_DSTATION_ANALYSIS.totalAmount)}</p>
+              <p className="mt-1 text-sm text-slate-300">{formatCount(TILON_DSTATION_ANALYSIS.totalCount)}개</p>
+            </div>
+          </div>
+          <div className="grid gap-5 xl:grid-cols-2">
+            <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <h3 className="mb-3 text-sm font-bold text-white">연도별 Dstation 매출 추이</h3>
+              <MiniLineTrend rows={TILON_DSTATION_ANALYSIS.yearlySales} />
+            </article>
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <h3 className="mb-3 text-sm font-bold text-white">Dstation 제품 규격별 매출</h3>
+              <MiniBars rows={TILON_DSTATION_ANALYSIS.topBuyers} />
+            </article>
+          </div>
+        </section>
+
+        <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
+          <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
+            <div>
               <h2 className="text-base font-black text-white">연도별 VDI 조달판매 상세 분석</h2>
               <p className="mt-1 text-xs text-cyan-100/70">연도를 선택하면 공급기업별 금액, 점유율, 판매라이선스 수와 원형 점유율 그래프가 함께 갱신됩니다.</p>
             </div>
@@ -508,36 +538,6 @@ function App() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-            </article>
-          </div>
-        </section>
-
-        <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
-          <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-cyan-200">{TILON_DSTATION_ANALYSIS.periodLabel}</p>
-              <h2 className="mt-1 text-xl font-black text-white">
-                틸론 <span className="text-sm font-bold text-slate-300">({TILON_DSTATION_ANALYSIS.product}) 공공조달 핵심 실적</span>
-              </h2>
-              <div className="mt-3 inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-black text-cyan-200">
-                최근 5개년 VDI 조달 누적 매출 1위
-              </div>
-              <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">{TILON_DSTATION_ANALYSIS.summary}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs text-slate-400">5개년 Dstation 누적 실적</p>
-              <p className="text-3xl font-black text-cyan-100">{formatMoney(TILON_DSTATION_ANALYSIS.totalAmount)}</p>
-              <p className="mt-1 text-sm text-slate-300">{formatCount(TILON_DSTATION_ANALYSIS.totalCount)}개</p>
-            </div>
-          </div>
-          <div className="grid gap-5 xl:grid-cols-2">
-            <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-              <h3 className="mb-3 text-sm font-bold text-white">연도별 Dstation 매출 추이</h3>
-              <MiniLineTrend rows={TILON_DSTATION_ANALYSIS.yearlySales} />
-            </article>
-            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-              <h3 className="mb-3 text-sm font-bold text-white">Dstation 제품 규격별 매출</h3>
-              <MiniBars rows={TILON_DSTATION_ANALYSIS.topBuyers} />
             </article>
           </div>
         </section>
