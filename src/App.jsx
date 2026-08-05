@@ -602,7 +602,6 @@ function App() {
           <div className="flex items-center rounded-2xl bg-white/70 px-8 py-4" style={{ minHeight: 112 }}>
             <div className="ml-4 flex min-h-[48px] items-center">
               <h2 className="flex items-center gap-3 break-keep text-2xl font-black leading-tight tracking-tight text-slate-950 md:text-3xl">
-                <TilonMark className="h-8 w-8" />
                 공공조달 VDI 압도적 1위 틸론, 숫자가 증명하는 <span className="text-sky-700">Dstation v9.0의 가치</span>
               </h2>
             </div>
