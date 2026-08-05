@@ -362,7 +362,7 @@ function App() {
       amount: safeNumber(company.amount),
       share: safeNumber(company.share),
       count: safeNumber(company.count)
-    })) ?? [],
+    })).filter(company => company.amount > 0 || company.count > 0) ?? [],
     [selectedAnnualSummary]
   );
 
@@ -416,7 +416,7 @@ function App() {
             </div>
           </div>
 
-          <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid items-start gap-5 xl:grid-cols-[1.15fr_0.85fr]">
             <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
@@ -429,7 +429,14 @@ function App() {
                 </div>
               </div>
               <div className="overflow-hidden rounded-xl border border-white/10">
-                <table className="w-full border-collapse text-sm">
+                <table className="w-full table-fixed border-collapse text-sm">
+                  <colgroup>
+                    <col className="w-[21%]" />
+                    <col className="w-[39%]" />
+                    <col className="w-[20%]" />
+                    <col className="w-[10%]" />
+                    <col className="w-[10%]" />
+                  </colgroup>
                   <thead className="bg-slate-950/70 text-xs text-slate-400">
                     <tr>
                       <th className="px-3 py-2 text-left">공급기업</th>
@@ -442,8 +449,8 @@ function App() {
                   <tbody className="divide-y divide-white/10">
                     {selectedAnnualSummary?.companies?.map(company => (
                       <tr key={`${selectedAnnualSummary.year}-${company.supplierName}`} className={company.supplierName === "틸론" ? "bg-cyan-300/10" : ""}>
-                        <td className="px-3 py-2 font-bold text-white">{company.supplierName}</td>
-                        <td className="px-3 py-2 text-cyan-100">{company.productName}</td>
+                        <td className="truncate px-3 py-2 font-bold text-white">{company.supplierName}</td>
+                        <td className="truncate px-3 py-2 text-cyan-100">{company.productName}</td>
                         <td className="px-3 py-2 text-right text-slate-200">{company.amount.toLocaleString("ko-KR")}원</td>
                         <td className="px-3 py-2 text-right font-bold text-cyan-200">{company.share.toFixed(2)}%</td>
                         <td className="px-3 py-2 text-right text-slate-300">{formatCount(company.count)}개</td>
@@ -462,19 +469,19 @@ function App() {
                 </div>
                 <p className="text-right text-xs font-bold text-cyan-200">{formatCount(annualShareData.length)}개사</p>
               </div>
-              <div className="h-[260px]">
+              <div className="h-[230px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={annualShareData} dataKey="amount" nameKey="name" innerRadius={62} outerRadius={104} paddingAngle={3}>
+                    <Pie data={annualShareData} dataKey="amount" nameKey="name" innerRadius={54} outerRadius={92} paddingAngle={3}>
                       {annualShareData.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
                     </Pie>
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="mt-4 space-y-2">
+              <div className="mt-3 space-y-2">
                 {annualShareData.map((company, index) => (
-                  <div key={company.name} className="rounded-xl bg-white/[0.03] px-3 py-2.5 text-xs">
+                  <div key={company.name} className="rounded-xl bg-white/[0.03] px-3 py-2 text-xs">
                     <div className="mb-2 flex items-center justify-between gap-3">
                       <span className="flex min-w-0 items-center gap-2 font-bold text-white">
                         <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
