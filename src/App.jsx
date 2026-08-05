@@ -313,8 +313,8 @@ function renderLeaderSlice(props) {
     <Sector
       cx={cx}
       cy={cy}
-      innerRadius={Math.max(0, innerRadius - 4)}
-      outerRadius={outerRadius + 10}
+      innerRadius={Math.max(0, innerRadius - 6)}
+      outerRadius={outerRadius + 14}
       startAngle={startAngle}
       endAngle={endAngle}
       fill={fill}
@@ -493,15 +493,15 @@ function App() {
                 </div>
                 <p className="text-right text-xs font-bold text-cyan-200">{formatCount(annualShareData.length)}개사</p>
               </div>
-              <div className="h-[230px]">
+              <div className="h-[340px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={annualShareData}
                       dataKey="amount"
                       nameKey="name"
-                      innerRadius={52}
-                      outerRadius={88}
+                      innerRadius={82}
+                      outerRadius={132}
                       paddingAngle={3}
                       activeIndex={annualLeaderIndex}
                       activeShape={renderLeaderSlice}
