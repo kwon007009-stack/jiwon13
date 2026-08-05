@@ -33,6 +33,7 @@ const VERIFIED_VDI_SALES = companySummary.annualVerifiedSales;
 const FIVE_YEAR_VDI_RANKING = companySummary.fiveYearVdiRanking;
 const TILON_DSTATION_ANALYSIS = companySummary.tilonDstation;
 const EXCEL_COMPETITOR_ANALYSIS = companySummary.competitorAnalysis;
+const ALL_YEARS_OPTION = "all";
 
 const safeText = value => String(value ?? "").trim();
 const searchableText = value => safeText(value).toLowerCase();
@@ -339,7 +340,7 @@ function DstationYearTick({ x, y, payload }) {
   const label = safeText(payload?.value);
   const is2026 = label.includes("2026");
   return (
-    <g transform={`translate(${x},${y})`}>
+    <g transform={`translate(${x},${y + 8})`}>
       <text textAnchor="middle" fill="#475569" fontSize={11} fontWeight={800}>
         <tspan x="0" dy="0">{label.replace("년", "")}</tspan>
         {is2026 ? <tspan x="0" dy="14" fontSize={10} fontWeight={700}>기준일 현재</tspan> : null}
@@ -387,7 +388,7 @@ function DstationTrendChart({ rows, competitors = [] }) {
         </div>
         <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-black text-cyan-200">2026년 기준일 현재 누적</span>
       </div>
-      <div className="h-[360px]">
+      <div style={{ height: 360, minHeight: 360 }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 34, right: 28, left: 6, bottom: 28 }}>
             <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
@@ -520,9 +521,42 @@ function App() {
   );
   const productShare = useMemo(() => groupAndSum(filteredData, "productGroup"), [filteredData]);
   const trendData = useMemo(() => monthlyTrend(filteredData), [filteredData]);
+  const allAnnualSummary = useMemo(() => {
+    const companyMap = new Map();
+    VERIFIED_VDI_SALES.forEach(summary => {
+      (summary.companies ?? []).forEach(company => {
+        const key = `${company.supplierName}-${company.productName}`;
+        const current = companyMap.get(key) ?? {
+          supplierName: company.supplierName,
+          productName: company.productName,
+          amount: 0,
+          count: 0
+        };
+        current.amount += safeNumber(company.amount);
+        current.count += safeNumber(company.count);
+        companyMap.set(key, current);
+      });
+    });
+    const totalAmount = Array.from(companyMap.values()).reduce((sum, company) => sum + safeNumber(company.amount), 0);
+    const companies = Array.from(companyMap.values())
+      .map(company => ({
+        ...company,
+        share: totalAmount ? safeNumber(company.amount) / totalAmount * 100 : 0
+      }))
+      .sort((a, b) => b.amount - a.amount);
+    return {
+      year: "전체",
+      label: "2021~2026 전체 VDI 조달판매",
+      basis: "DstationX 가격정하기.xlsx 단가×판매라이선스 합산 기준",
+      totalAmount,
+      companies
+    };
+  }, []);
   const selectedAnnualSummary = useMemo(
-    () => VERIFIED_VDI_SALES.find(summary => summary.year === selectedAnnualYear) ?? VERIFIED_VDI_SALES.at(-1),
-    [selectedAnnualYear]
+    () => selectedAnnualYear === ALL_YEARS_OPTION
+      ? allAnnualSummary
+      : VERIFIED_VDI_SALES.find(summary => summary.year === selectedAnnualYear) ?? VERIFIED_VDI_SALES.at(-1),
+    [allAnnualSummary, selectedAnnualYear]
   );
   const annualShareData = useMemo(
     () => selectedAnnualSummary?.companies?.map(company => ({
@@ -534,6 +568,10 @@ function App() {
       isLeader: searchableText(company.productName).includes("dstation")
     })).filter(company => company.amount > 0 || company.count > 0) ?? [],
     [selectedAnnualSummary]
+  );
+  const tilonAnnualShare = useMemo(
+    () => annualShareData.find(company => company.isLeader),
+    [annualShareData]
   );
   const selectedCompetitorAnalysis = useMemo(
     () => EXCEL_COMPETITOR_ANALYSIS.find(company => company.company === selectedCompetitor) ?? EXCEL_COMPETITOR_ANALYSIS[0],
@@ -560,30 +598,15 @@ function App() {
       </header>
 
       <main className="mx-auto max-w-[1440px] px-5 py-6">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-slate-400">
-            조회 결과 <span className="font-bold text-cyan-300">{formatCount(filteredData.length)}</span>개 요약 /
-            분석 대상 원본 <span className="font-bold text-white">{formatCount(directVdiData.length)}</span>개 요약
-          </p>
-        </div>
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 shadow-2xl shadow-black/20">
-          <div className="mb-5 rounded-2xl border border-cyan-300/20 bg-white/70 px-6 py-5">
-            <div className="ml-4 space-y-2">
-              <p className="flex items-center gap-3 text-xl font-black text-slate-950">
+          <div className="flex items-center rounded-2xl bg-white/70 px-8 py-4" style={{ minHeight: 112 }}>
+            <div className="ml-4 flex min-h-[48px] items-center">
+              <h2 className="flex items-center gap-3 break-keep text-2xl font-black leading-tight tracking-tight text-slate-950 md:text-3xl">
                 <TilonMark className="h-8 w-8" />
-                <span>틸론 <span className="text-slate-600">{DSTATION_HERO_METRICS.product}</span></span>
-              </p>
-              <h2 className="flex items-center gap-3 text-2xl font-black leading-tight tracking-tight text-slate-950 md:text-3xl">
-                <TilonMark className="h-8 w-8" />
-                공공조달 VDI <span className="text-sky-700">누적 판매실적 1위</span>
+                공공조달 VDI 압도적 1위 틸론, 숫자가 증명하는 <span className="text-sky-700">Dstation v9.0의 가치</span>
               </h2>
             </div>
           </div>
-
-          <div>
-            <DstationTrendChart rows={TILON_DSTATION_ANALYSIS.yearlySales} competitors={EXCEL_COMPETITOR_ANALYSIS} />
-          </div>
-
         </section>
 
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
@@ -593,6 +616,17 @@ function App() {
               <p className="mt-1 text-xs text-cyan-100/70">연도를 선택하면 공급기업별 금액, 점유율, 판매라이선스 수와 원형 점유율 그래프가 함께 갱신됩니다.</p>
             </div>
             <div className="flex rounded-xl border border-white/10 bg-slate-950/70 p-1">
+              <button
+                type="button"
+                onClick={() => setSelectedAnnualYear(ALL_YEARS_OPTION)}
+                className={`h-9 rounded-lg px-4 text-sm font-black transition ${
+                  selectedAnnualYear === ALL_YEARS_OPTION
+                    ? "bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-950/30"
+                    : "text-slate-300 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                전체
+              </button>
               {VERIFIED_VDI_SALES.map(summary => (
                 <button
                   key={summary.year}
@@ -615,7 +649,6 @@ function App() {
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-black text-white">{selectedAnnualSummary?.label}</h3>
-                  <p className="mt-1 text-xs text-cyan-100/70">{selectedAnnualSummary?.basis}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-slate-400">합계</p>
@@ -645,7 +678,7 @@ function App() {
                       const isTilon = company.supplierName === "틸론";
                       return (
                       <tr
-                        key={`${selectedAnnualSummary.year}-${company.supplierName}`}
+                        key={`${selectedAnnualSummary?.year}-${company.supplierName}`}
                         className={isTilon ? "bg-cyan-300/15 text-[15px] shadow-[inset_4px_0_0_#0891b2]" : ""}
                       >
                         <td className={`truncate px-3 ${isTilon ? "py-3 font-black" : "py-2 font-bold"} text-white`}>{company.supplierName}</td>
@@ -682,6 +715,14 @@ function App() {
                     >
                       {annualShareData.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
                     </Pie>
+                    {tilonAnnualShare ? (
+                      <text x="50%" y="48%" textAnchor="middle" dominantBaseline="middle">
+                        <tspan x="50%" dy="-8" fill="#0f172a" fontSize="14" fontWeight="900">틸론</tspan>
+                        <tspan x="50%" dy="34" fill="#0284c7" fontSize="32" fontWeight="900">
+                          {safeNumber(tilonAnnualShare.share).toFixed(2)}%
+                        </tspan>
+                      </text>
+                    ) : null}
                     <Tooltip
                       contentStyle={{
                         background: "#ffffff",
@@ -702,6 +743,10 @@ function App() {
               </div>
             </article>
           </div>
+        </section>
+
+        <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 shadow-2xl shadow-black/20">
+          <DstationTrendChart rows={TILON_DSTATION_ANALYSIS.yearlySales} competitors={EXCEL_COMPETITOR_ANALYSIS} />
         </section>
 
         <section className="mb-5 rounded-2xl border border-purple-300/20 bg-purple-300/10 p-5 shadow-2xl shadow-black/20">
@@ -815,7 +860,6 @@ function App() {
                   <Pie data={productShare} dataKey="amount" nameKey="name" innerRadius={72} outerRadius={116} paddingAngle={3}>
                     {productShare.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
                   </Pie>
-                  <Tooltip contentStyle={{ background: "#020617", border: "1px solid #334155", borderRadius: 12 }} formatter={value => formatMoney(value)} />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
