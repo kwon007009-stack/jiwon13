@@ -15,7 +15,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { Database, ShieldCheck, TrendingUp } from "lucide-react";
+import { Database, ShieldCheck, Trophy, TrendingUp } from "lucide-react";
 import productDictionary from "../data/dictionary/vdi_product_dictionary.json";
 import companySummary from "../data/output/vdi_company_summary.json";
 
@@ -47,6 +47,21 @@ const formatMoney = value => {
 };
 const formatNullableMoney = value => value === null || value === undefined || value === "" ? "미확인" : formatMoney(value);
 const formatCount = value => safeNumber(value).toLocaleString("ko-KR");
+const formatEokLabel = value => `${(safeNumber(value) / 100000000).toLocaleString("ko-KR", { maximumFractionDigits: 1 })}억원`;
+
+const DSTATION_HERO_METRICS = {
+  period: "2021~2026",
+  product: "Dstation v9.0",
+  revenueLabel: "110.4억원",
+  licenseLabel: "20,287개",
+  enterpriseRevenueLabel: "99.8억원",
+  smallRevenueLabel: "10.6억원",
+  enterpriseShareLabel: "90.4%",
+  smallShareLabel: "9.6%",
+  enterpriseRevenue: 9980000000,
+  smallRevenue: 1060000000,
+  totalRevenue: 11040000000
+};
 
 function splitAmount(totalAmount, count) {
   const base = Math.floor(totalAmount / count);
@@ -306,6 +321,114 @@ function MiniLineTrend({ rows }) {
   );
 }
 
+function DstationYearTick({ x, y, payload }) {
+  const label = safeText(payload?.value);
+  const is2026 = label.includes("2026");
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text textAnchor="middle" fill="#475569" fontSize={11} fontWeight={800}>
+        <tspan x="0" dy="0">{label.replace("년", "")}</tspan>
+        {is2026 ? <tspan x="0" dy="14" fontSize={10} fontWeight={700}>기준일 현재</tspan> : null}
+      </text>
+    </g>
+  );
+}
+
+function DstationTrendChart({ rows }) {
+  const chartData = rows.map(row => ({
+    period: row.period ?? row.name,
+    amount: row.amount === null || row.amount === undefined ? 0 : safeNumber(row.amount),
+    count: safeNumber(row.count)
+  }));
+
+  return (
+    <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-base font-black text-white">연도별 Dstation 조달 매출 추이</h3>
+          <p className="mt-1 text-xs font-bold text-slate-400">단위: 억원</p>
+        </div>
+        <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-black text-cyan-200">2026년 기준일 현재 누적</span>
+      </div>
+      <div className="h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartData} margin={{ top: 34, right: 28, left: 6, bottom: 28 }}>
+            <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+            <XAxis dataKey="period" tick={<DstationYearTick />} tickLine={false} interval={0} height={44} />
+            <YAxis tickFormatter={formatEokLabel} tick={{ fill: "#475569", fontSize: 11, fontWeight: 700 }} width={62} tickLine={false} />
+            <Tooltip
+              contentStyle={{
+                background: "#ffffff",
+                border: "1px solid #cbd5e1",
+                borderRadius: 12,
+                color: "#0f172a",
+                boxShadow: "0 14px 30px rgba(15,23,42,0.14)"
+              }}
+              labelStyle={{ color: "#0f172a", fontWeight: 900 }}
+              formatter={(value, _name, item) => [
+                `${formatEokLabel(value)}${item?.payload?.count ? ` / ${formatCount(item.payload.count)}개` : ""}`,
+                "매출액"
+              ]}
+            />
+            <Line
+              type="monotone"
+              dataKey="amount"
+              stroke="#0284c7"
+              strokeWidth={3}
+              dot={{ r: 4, fill: "#ffffff", stroke: "#0284c7", strokeWidth: 2 }}
+              activeDot={{ r: 6, fill: "#0284c7", stroke: "#ffffff", strokeWidth: 2 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </article>
+  );
+}
+
+function DstationSpecCard({ rows }) {
+  const specs = [
+    {
+      name: "Dstation v9.0 / 100유저 이상",
+      amountLabel: DSTATION_HERO_METRICS.enterpriseRevenueLabel,
+      shareLabel: DSTATION_HERO_METRICS.enterpriseShareLabel,
+      amount: DSTATION_HERO_METRICS.enterpriseRevenue,
+      color: "#075985"
+    },
+    {
+      name: "Dstation v9.0 / 1~99유저",
+      amountLabel: DSTATION_HERO_METRICS.smallRevenueLabel,
+      shareLabel: DSTATION_HERO_METRICS.smallShareLabel,
+      amount: DSTATION_HERO_METRICS.smallRevenue,
+      color: "#67e8f9"
+    }
+  ];
+
+  return (
+    <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+      <h3 className="text-base font-black text-white">제품 규격별 매출</h3>
+      <div className="mt-5 space-y-5">
+        {specs.map(spec => (
+          <div key={spec.name} className="grid gap-2">
+            <div className="grid grid-cols-[minmax(0,1fr)_150px] items-end gap-4 text-sm">
+              <p className="min-w-0 break-keep font-black leading-snug text-white">{spec.name}</p>
+              <p className="whitespace-nowrap text-right font-black text-cyan-200">{spec.amountLabel} · {spec.shareLabel}</p>
+            </div>
+            <div className="h-3 overflow-hidden rounded-full bg-slate-800">
+              <div
+                className="h-full rounded-full"
+                style={{
+                  width: `${Math.max(6, (spec.amount / DSTATION_HERO_METRICS.totalRevenue) * 100)}%`,
+                  backgroundColor: spec.color
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
 function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
   const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
@@ -394,34 +517,24 @@ function App() {
             분석 대상 원본 <span className="font-bold text-white">{formatCount(directVdiData.length)}</span>개 요약
           </p>
         </div>
-        <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
-          <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
+        <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 shadow-2xl shadow-black/20">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-cyan-300/20 bg-white/70 px-6 py-5">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-cyan-200">{TILON_DSTATION_ANALYSIS.periodLabel}</p>
-              <h2 className="mt-1 text-xl font-black text-white">
-                틸론 <span className="text-sm font-bold text-slate-300">({TILON_DSTATION_ANALYSIS.product}) 공공조달 핵심 실적</span>
+              <p className="text-xl font-black text-slate-950">틸론 <span className="text-slate-600">{DSTATION_HERO_METRICS.product}</span></p>
+              <h2 className="mt-2 text-2xl font-black leading-tight tracking-tight text-slate-950 md:text-3xl">
+                공공조달 VDI <span className="text-sky-700">누적 판매실적 1위</span>
               </h2>
-              <div className="mt-3 inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-black text-cyan-200">
-                최근 5개년 VDI 조달 누적 매출 1위
-              </div>
-              <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-300">{TILON_DSTATION_ANALYSIS.summary}</p>
             </div>
-            <div className="text-right">
-              <p className="text-xs text-slate-400">5개년 Dstation 누적 실적</p>
-              <p className="text-3xl font-black text-cyan-100">{formatMoney(TILON_DSTATION_ANALYSIS.totalAmount)}</p>
-              <p className="mt-1 text-sm text-slate-300">{formatCount(TILON_DSTATION_ANALYSIS.totalCount)}개</p>
+            <div className="flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-amber-500 shadow-sm ring-1 ring-sky-100">
+              <Trophy size={34} aria-hidden="true" />
+              <p className="text-5xl font-black tracking-tight">No.1</p>
             </div>
           </div>
-          <div className="grid gap-5 xl:grid-cols-2">
-            <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-              <h3 className="mb-3 text-sm font-bold text-white">연도별 Dstation 매출 추이</h3>
-              <MiniLineTrend rows={TILON_DSTATION_ANALYSIS.yearlySales} />
-            </article>
-            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-              <h3 className="mb-3 text-sm font-bold text-white">Dstation 제품 규격별 매출</h3>
-              <MiniBars rows={TILON_DSTATION_ANALYSIS.topBuyers} />
-            </article>
+
+          <div>
+            <DstationTrendChart rows={TILON_DSTATION_ANALYSIS.yearlySales} />
           </div>
+
         </section>
 
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5 shadow-2xl shadow-black/20">
