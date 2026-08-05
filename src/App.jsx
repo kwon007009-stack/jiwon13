@@ -520,7 +520,15 @@ function App() {
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 shadow-2xl shadow-black/20">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-cyan-300/20 bg-white/70 px-6 py-5">
             <div>
-              <p className="text-xl font-black text-slate-950">틸론 <span className="text-slate-600">{DSTATION_HERO_METRICS.product}</span></p>
+              <p className="flex items-center gap-3 text-xl font-black text-slate-950">
+                <span className="grid h-10 w-10 shrink-0 grid-cols-2 gap-1.5 rounded-md bg-white/70 p-1 shadow-sm ring-1 ring-slate-200" aria-hidden="true">
+                  <span className="rounded-full bg-orange-500" />
+                  <span className="rounded-full bg-yellow-400" />
+                  <span className="rounded-full bg-sky-700" />
+                  <span className="rounded-full bg-emerald-600" />
+                </span>
+                <span>틸론 <span className="text-slate-600">{DSTATION_HERO_METRICS.product}</span></span>
+              </p>
               <h2 className="mt-2 text-2xl font-black leading-tight tracking-tight text-slate-950 md:text-3xl">
                 공공조달 VDI <span className="text-sky-700">누적 판매실적 1위</span>
               </h2>
