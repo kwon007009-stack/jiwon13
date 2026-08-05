@@ -348,23 +348,46 @@ function DstationYearTick({ x, y, payload }) {
   );
 }
 
-function DstationTrendChart({ rows }) {
-  const chartData = rows.map(row => ({
-    period: row.period ?? row.name,
-    amount: row.amount === null || row.amount === undefined ? 0 : safeNumber(row.amount),
-    count: safeNumber(row.count)
-  }));
+function DstationTrendChart({ rows, competitors = [] }) {
+  const competitorSeries = competitors
+    .filter(company => (company?.yearlySales ?? []).some(row => safeNumber(row?.amount) > 0))
+    .slice(0, 4)
+    .map((company, index) => ({
+      key: `competitor${index}`,
+      name: company.company,
+      rows: company.yearlySales ?? [],
+      color: [PURPLE, BLUE, PINK, GREEN][index % 4],
+      strokeWidth: 2
+    }));
+  const series = [
+    { key: "tilon", name: "틸론", rows, color: "#0284c7", strokeWidth: 3 },
+    ...competitorSeries
+  ];
+  const chartData = (rows ?? []).map((row, rowIndex) => {
+    const period = row.period ?? row.name;
+    const point = {
+      period,
+      tilon: row.amount === null || row.amount === undefined ? 0 : safeNumber(row.amount),
+      tilonCount: safeNumber(row.count)
+    };
+    competitorSeries.forEach(item => {
+      const matched = (item.rows ?? []).find(entry => (entry.period ?? entry.name) === period) ?? item.rows?.[rowIndex];
+      point[item.key] = matched?.amount === null || matched?.amount === undefined ? 0 : safeNumber(matched?.amount);
+      point[`${item.key}Count`] = safeNumber(matched?.count);
+    });
+    return point;
+  });
 
   return (
     <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-base font-black text-white">연도별 Dstation 조달 매출 추이</h3>
+          <h3 className="text-base font-black text-white">연도별 VDI 조달 매출 추이</h3>
           <p className="mt-1 text-xs font-bold text-slate-400">단위: 억원</p>
         </div>
         <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-black text-cyan-200">2026년 기준일 현재 누적</span>
       </div>
-      <div className="h-[300px]">
+      <div className="h-[360px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 34, right: 28, left: 6, bottom: 28 }}>
             <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
@@ -384,14 +407,21 @@ function DstationTrendChart({ rows }) {
                 "매출액"
               ]}
             />
-            <Line
-              type="monotone"
-              dataKey="amount"
-              stroke="#0284c7"
-              strokeWidth={3}
-              dot={{ r: 4, fill: "#ffffff", stroke: "#0284c7", strokeWidth: 2 }}
-              activeDot={{ r: 6, fill: "#0284c7", stroke: "#ffffff", strokeWidth: 2 }}
-            />
+            <Legend />
+            {series.map(item => (
+              <Line
+                key={item.key}
+                type="monotone"
+                dataKey={item.key}
+                name={item.name}
+                stroke={item.color}
+                strokeWidth={item.strokeWidth}
+                connectNulls
+                isAnimationActive={false}
+                dot={{ r: item.key === "tilon" ? 4 : 3, fill: "#ffffff", stroke: item.color, strokeWidth: 2 }}
+                activeDot={{ r: item.key === "tilon" ? 6 : 5, fill: item.color, stroke: "#ffffff", strokeWidth: 2 }}
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -446,6 +476,7 @@ function DstationSpecCard({ rows }) {
 function App() {
   const [rawMasterData, setRawMasterData] = useState([]);
   const [selectedAnnualYear, setSelectedAnnualYear] = useState(VERIFIED_VDI_SALES.at(-1)?.year ?? YTD_YEAR);
+  const [selectedCompetitor, setSelectedCompetitor] = useState(EXCEL_COMPETITOR_ANALYSIS[0]?.company ?? "");
 
   useEffect(() => {
     setRawMasterData(buildMockProcurementData());
@@ -504,6 +535,10 @@ function App() {
     })).filter(company => company.amount > 0 || company.count > 0) ?? [],
     [selectedAnnualSummary]
   );
+  const selectedCompetitorAnalysis = useMemo(
+    () => EXCEL_COMPETITOR_ANALYSIS.find(company => company.company === selectedCompetitor) ?? EXCEL_COMPETITOR_ANALYSIS[0],
+    [selectedCompetitor]
+  );
 
   return (
     <div className="theme-light min-h-screen text-slate-100">
@@ -546,7 +581,7 @@ function App() {
           </div>
 
           <div>
-            <DstationTrendChart rows={TILON_DSTATION_ANALYSIS.yearlySales} />
+            <DstationTrendChart rows={TILON_DSTATION_ANALYSIS.yearlySales} competitors={EXCEL_COMPETITOR_ANALYSIS} />
           </div>
 
         </section>
@@ -676,8 +711,27 @@ function App() {
               개인정보보호·망연계 등 비VDI 매출을 제외한 VDI 전용 분석 요약값입니다. 원천 row와 중복 합산하지 않도록 별도 검증 요약으로 표시합니다.
             </p>
           </div>
-          <div className="grid gap-4 xl:grid-cols-2">
-            {EXCEL_COMPETITOR_ANALYSIS.map(company => (
+          <div className="mb-4 flex flex-wrap gap-2">
+            {EXCEL_COMPETITOR_ANALYSIS.map(company => {
+              const isActive = selectedCompetitorAnalysis?.company === company.company;
+              return (
+                <button
+                  key={company.company}
+                  type="button"
+                  onClick={() => setSelectedCompetitor(company.company)}
+                  className={`rounded-full border px-4 py-2 text-sm font-bold transition ${
+                    isActive
+                      ? "border-purple-300 bg-purple-300 text-slate-950 shadow-lg shadow-purple-950/20"
+                      : "border-white/10 bg-slate-950/50 text-slate-300 hover:border-purple-300/50 hover:bg-purple-300/10 hover:text-white"
+                  }`}
+                >
+                  {company.company}
+                </button>
+              );
+            })}
+          </div>
+          <div className="grid gap-4">
+            {EXCEL_COMPETITOR_ANALYSIS.filter(company => company.company === selectedCompetitorAnalysis?.company).map(company => (
               <article key={company.company} className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
                 <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -709,7 +763,7 @@ function App() {
         </section>
 
         <section className="grid gap-5 xl:grid-cols-2">
-          <ChartCard title="최근 5개년 VDI 공급기업 랭킹 TOP 15" subtitle={`${FIVE_YEAR_VDI_RANKING?.periodLabel ?? "최근 5개년"} 기준. 틸론 엑셀 실적과 경쟁사 VDI 전용 검증값 합산`}>
+          <ChartCard title="최근 5개년 VDI 공급기업 랭킹" subtitle={`${FIVE_YEAR_VDI_RANKING?.periodLabel ?? "최근 5개년"} 기준. 틸론 엑셀 실적과 경쟁사 VDI 전용 검증값 합산`}>
             {supplierRanking.length ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={supplierRanking} layout="vertical" margin={{ top: 8, right: 24, left: 32, bottom: 8 }}>
