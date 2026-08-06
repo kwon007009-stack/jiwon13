@@ -53,15 +53,15 @@ const formatEokLabel = value => `${(safeNumber(value) / 100000000).toLocaleStrin
 const DSTATION_HERO_METRICS = {
   period: "2021~2026",
   product: "Dstation v9.0",
-  revenueLabel: "110.4억원",
-  licenseLabel: "20,287개",
+  revenueLabel: "118.4억원",
+  licenseLabel: "22,603개",
   enterpriseRevenueLabel: "99.8억원",
   smallRevenueLabel: "10.6억원",
-  enterpriseShareLabel: "90.4%",
-  smallShareLabel: "9.6%",
+  enterpriseShareLabel: "84.3%",
+  smallShareLabel: "9.0%",
   enterpriseRevenue: 9980000000,
   smallRevenue: 1060000000,
-  totalRevenue: 11040000000
+  totalRevenue: 11835612400
 };
 
 function TilonMark({ className = "" }) {
@@ -431,22 +431,19 @@ function DstationTrendChart({ rows, competitors = [] }) {
 }
 
 function DstationSpecCard({ rows }) {
-  const specs = [
-    {
-      name: "Dstation v9.0 / 100유저 이상",
-      amountLabel: DSTATION_HERO_METRICS.enterpriseRevenueLabel,
-      shareLabel: DSTATION_HERO_METRICS.enterpriseShareLabel,
-      amount: DSTATION_HERO_METRICS.enterpriseRevenue,
-      color: "#075985"
-    },
-    {
-      name: "Dstation v9.0 / 1~99유저",
-      amountLabel: DSTATION_HERO_METRICS.smallRevenueLabel,
-      shareLabel: DSTATION_HERO_METRICS.smallShareLabel,
-      amount: DSTATION_HERO_METRICS.smallRevenue,
-      color: "#67e8f9"
-    }
-  ];
+  const totalAmount = rows.reduce((sum, row) => sum + safeNumber(row?.amount), 0) || DSTATION_HERO_METRICS.totalRevenue;
+  const colors = ["#075985", "#67e8f9", "#a855f7", "#34d399"];
+  const specs = rows.map((row, index) => {
+    const amount = safeNumber(row?.amount);
+    const share = totalAmount ? amount / totalAmount * 100 : 0;
+    return {
+      name: row.name,
+      amountLabel: formatEokLabel(amount),
+      shareLabel: `${share.toFixed(1)}%`,
+      amount,
+      color: colors[index % colors.length]
+    };
+  });
 
   return (
     <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
@@ -462,7 +459,7 @@ function DstationSpecCard({ rows }) {
               <div
                 className="h-full rounded-full"
                 style={{
-                  width: `${Math.max(6, (spec.amount / DSTATION_HERO_METRICS.totalRevenue) * 100)}%`,
+                  width: `${Math.max(6, (spec.amount / totalAmount) * 100)}%`,
                   backgroundColor: spec.color
                 }}
               />

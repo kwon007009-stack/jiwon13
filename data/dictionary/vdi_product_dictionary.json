@@ -44,6 +44,28 @@
     "verificationStatus": "EXCEL_VERIFIED"
   },
   {
+    "standardCompanyName": "틸론",
+    "companyAliases": [
+      "Tilon"
+    ],
+    "businessRegistrationNumber": "",
+    "standardProductName": "Dstation v9.0",
+    "productAliases": [
+      "Dstation v9.0",
+      "Dstation",
+      "24744549"
+    ],
+    "productIdentificationNumbers": [
+      "24744549"
+    ],
+    "productClassificationNumbers": [],
+    "directVdi": true,
+    "category": "DIRECT_VDI",
+    "excludedKeywords": [],
+    "notes": "DstationX 가격정하기.xlsx 기준 프라이빗/개발및도움SW개발자 / 단가 341,400원 / 규격서 O",
+    "verificationStatus": "EXCEL_VERIFIED"
+  },
+  {
     "standardCompanyName": "쓰리에스소프트",
     "companyAliases": [
       "3S소프트",
