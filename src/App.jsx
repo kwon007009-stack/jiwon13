@@ -495,10 +495,10 @@ function DstationShareBarChart({ rows, competitors = [] }) {
       >
         <p style={{ margin: 0, fontWeight: 900 }}>{label}</p>
         <div style={{ marginTop: 8, display: "grid", gap: 5, fontSize: 12 }}>
-          <p style={{ margin: 0, color: "#0369a1", fontWeight: 900 }}>
+          <p style={{ margin: 0, color: "#0891b2", fontWeight: 900 }}>
             틸론 {item.shareLabel} · {formatEokLabel(item.tilonAmount)}
           </p>
-          <p style={{ margin: 0, color: "#64748b", fontWeight: 800 }}>
+          <p style={{ margin: 0, color: "#7e22ce", fontWeight: 800 }}>
             기타 VDI 공급사 {safeNumber(item.competitorShare).toFixed(1)}% · {formatEokLabel(item.competitorAmount)}
           </p>
           <p style={{ margin: "4px 0 0", color: "#334155", fontWeight: 800 }}>
@@ -521,7 +521,7 @@ function DstationShareBarChart({ rows, competitors = [] }) {
       <div style={{ height: 360, minHeight: 360 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 34, right: 28, left: 6, bottom: 28 }}>
-            <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+            <CartesianGrid stroke="#dbeafe" strokeDasharray="3 3" />
             <XAxis dataKey="period" tick={<DstationYearTick />} tickLine={false} interval={0} height={44} />
             <YAxis
               domain={[0, 100]}
@@ -530,13 +530,13 @@ function DstationShareBarChart({ rows, competitors = [] }) {
               width={48}
               tickLine={false}
             />
-            <Tooltip content={compositionTooltip} cursor={{ fill: "rgba(14, 165, 233, 0.08)" }} />
-            <Legend />
+            <Tooltip content={compositionTooltip} cursor={{ fill: "rgba(168, 85, 247, 0.08)" }} />
+            <Legend iconType="circle" />
             <Bar
               dataKey="tilonShare"
               name="틸론 비중"
               stackId="vdiShare"
-              fill="#0284c7"
+              fill="#38bdf8"
               radius={[0, 0, 6, 6]}
               isAnimationActive={false}
               label={renderTilonShareLabel}
