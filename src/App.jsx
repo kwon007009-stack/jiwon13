@@ -430,6 +430,132 @@ function DstationTrendChart({ rows, competitors = [] }) {
   );
 }
 
+function DstationShareBarChart({ rows, competitors = [] }) {
+  const visibleCompetitors = competitors
+    .filter(company => (company?.yearlySales ?? []).some(row => safeNumber(row?.amount) > 0))
+    .map(company => ({
+      name: company.company,
+      rows: company.yearlySales ?? []
+    }));
+
+  const chartData = (rows ?? []).map((row, rowIndex) => {
+    const period = row.period ?? row.name;
+    const tilonAmount = row.amount === null || row.amount === undefined ? 0 : safeNumber(row.amount);
+    const competitorAmount = visibleCompetitors.reduce((sum, company) => {
+      const matched = (company.rows ?? []).find(entry => (entry.period ?? entry.name) === period) ?? company.rows?.[rowIndex];
+      return sum + (matched?.amount === null || matched?.amount === undefined ? 0 : safeNumber(matched?.amount));
+    }, 0);
+    const totalAmount = tilonAmount + competitorAmount;
+    const tilonShare = totalAmount ? tilonAmount / totalAmount * 100 : 0;
+    const competitorShare = Math.max(0, 100 - tilonShare);
+
+    return {
+      period,
+      tilonShare,
+      competitorShare,
+      tilonAmount,
+      competitorAmount,
+      totalAmount,
+      shareLabel: totalAmount ? `${tilonShare.toFixed(1)}%` : "-"
+    };
+  });
+
+  const renderTilonShareLabel = ({ x, y, width, height, value }) => {
+    if (safeNumber(value) < 8) return null;
+    return (
+      <text
+        x={x + width / 2}
+        y={y + height / 2}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill="#ffffff"
+        fontSize={12}
+        fontWeight={900}
+      >
+        {`${safeNumber(value).toFixed(1)}%`}
+      </text>
+    );
+  };
+
+  const compositionTooltip = ({ active, payload, label }) => {
+    if (!active || !payload?.length) return null;
+    const item = payload[0]?.payload;
+    if (!item) return null;
+    return (
+      <div
+        style={{
+          background: "#ffffff",
+          border: "1px solid #cbd5e1",
+          borderRadius: 12,
+          color: "#0f172a",
+          boxShadow: "0 14px 30px rgba(15,23,42,0.14)",
+          minWidth: 210,
+          padding: "10px 12px"
+        }}
+      >
+        <p style={{ margin: 0, fontWeight: 900 }}>{label}</p>
+        <div style={{ marginTop: 8, display: "grid", gap: 5, fontSize: 12 }}>
+          <p style={{ margin: 0, color: "#0369a1", fontWeight: 900 }}>
+            틸론 {item.shareLabel} · {formatEokLabel(item.tilonAmount)}
+          </p>
+          <p style={{ margin: 0, color: "#64748b", fontWeight: 800 }}>
+            기타 VDI 공급사 {safeNumber(item.competitorShare).toFixed(1)}% · {formatEokLabel(item.competitorAmount)}
+          </p>
+          <p style={{ margin: "4px 0 0", color: "#334155", fontWeight: 800 }}>
+            전체 {formatEokLabel(item.totalAmount)}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <article className="h-full rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-base font-black text-white">연도별 VDI 조달 매출 구성</h3>
+          <p className="mt-1 text-xs font-bold text-slate-400">전체 VDI 매출 내 틸론 비중</p>
+        </div>
+        <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-black text-cyan-200">2026년 기준일 현재 누적</span>
+      </div>
+      <div style={{ height: 360, minHeight: 360 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData} margin={{ top: 34, right: 28, left: 6, bottom: 28 }}>
+            <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
+            <XAxis dataKey="period" tick={<DstationYearTick />} tickLine={false} interval={0} height={44} />
+            <YAxis
+              domain={[0, 100]}
+              tickFormatter={value => `${value}%`}
+              tick={{ fill: "#475569", fontSize: 11, fontWeight: 700 }}
+              width={48}
+              tickLine={false}
+            />
+            <Tooltip content={compositionTooltip} cursor={{ fill: "rgba(14, 165, 233, 0.08)" }} />
+            <Legend />
+            <Bar
+              dataKey="tilonShare"
+              name="틸론 비중"
+              stackId="vdiShare"
+              fill="#0284c7"
+              radius={[0, 0, 6, 6]}
+              isAnimationActive={false}
+              label={renderTilonShareLabel}
+            />
+            <Bar
+              dataKey="competitorShare"
+              name="기타 VDI 공급사"
+              stackId="vdiShare"
+              fill="#bae6fd"
+              radius={[6, 6, 0, 0]}
+              isAnimationActive={false}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </article>
+  );
+}
+
 function DstationSpecCard({ rows }) {
   const totalAmount = rows.reduce((sum, row) => sum + safeNumber(row?.amount), 0) || DSTATION_HERO_METRICS.totalRevenue;
   const colors = ["#075985", "#67e8f9", "#a855f7", "#34d399"];
@@ -516,7 +642,6 @@ function App() {
       .slice(0, 10),
     []
   );
-  const productShare = useMemo(() => groupAndSum(filteredData, "productGroup"), [filteredData]);
   const trendData = useMemo(() => monthlyTrend(filteredData), [filteredData]);
   const allAnnualSummary = useMemo(() => {
     const companyMap = new Map();
@@ -742,7 +867,7 @@ function App() {
         </section>
 
         <section className="mb-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 shadow-2xl shadow-black/20">
-          <DstationTrendChart rows={TILON_DSTATION_ANALYSIS.yearlySales} competitors={EXCEL_COMPETITOR_ANALYSIS} />
+          <DstationShareBarChart rows={TILON_DSTATION_ANALYSIS.yearlySales} competitors={EXCEL_COMPETITOR_ANALYSIS} />
         </section>
 
         <section className="mb-5 rounded-2xl border border-purple-300/20 bg-purple-300/10 p-5 shadow-2xl shadow-black/20">
@@ -803,7 +928,7 @@ function App() {
           </div>
         </section>
 
-        <section className="grid gap-5 xl:grid-cols-2">
+        <section className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
           <ChartCard title="최근 5개년 VDI 공급기업 랭킹" subtitle={`${FIVE_YEAR_VDI_RANKING?.periodLabel ?? "최근 5개년"} 기준. 틸론 엑셀 실적과 경쟁사 VDI 전용 검증값 합산`}>
             {supplierRanking.length ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -849,18 +974,6 @@ function App() {
             ) : <EmptyState />}
           </ChartCard>
 
-          <ChartCard title="품목/서비스별 비중" subtitle="제품군별 환산 매출 비중">
-            {productShare.length ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={productShare} dataKey="amount" nameKey="name" innerRadius={72} outerRadius={116} paddingAngle={3}>
-                    {productShare.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
-                  </Pie>
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            ) : <EmptyState />}
-          </ChartCard>
         </section>
 
         <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -870,48 +983,6 @@ function App() {
           <KpiCard title="평균 라이선스 단가" value={formatMoney(kpis.averageAmount)} helper="총 환산 매출 / 총 판매라이선스" icon={Database} accent={PINK} />
         </section>
 
-        <section className="mt-6 rounded-2xl border border-white/10 bg-slate-900/75 p-5 shadow-2xl shadow-black/20">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 className="text-base font-bold text-white">엑셀 요약 데이터</h2>
-              <p className="mt-1 text-xs text-slate-400">DstationX 가격정하기.xlsx의 회사×연도별 환산 매출 요약입니다.</p>
-            </div>
-            <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-bold text-cyan-200">
-              {formatCount(filteredData.length)} rows
-            </span>
-          </div>
-          <div className="max-h-[420px] overflow-auto rounded-xl border border-white/10">
-            <table className="min-w-[1100px] w-full border-collapse text-left text-sm">
-              <thead className="sticky top-0 bg-slate-950 text-xs uppercase text-slate-400">
-                <tr>
-                  <th className="px-4 py-3">기준일</th>
-                  <th className="px-4 py-3">공급기업명</th>
-                  <th className="px-4 py-3">제품/품목명</th>
-                  <th className="px-4 py-3">제품군</th>
-                  <th className="px-4 py-3">정보</th>
-                  <th className="px-4 py-3">분석명</th>
-                  <th className="px-4 py-3 text-right">금액</th>
-                  <th className="px-4 py-3">산출기준</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10">
-                {filteredData.map(item => (
-                  <tr key={safeText(item?.id)} className="hover:bg-white/[0.03]">
-                    <td className="px-4 py-3 text-slate-300">{safeText(item?.contractDate) || "-"}</td>
-                    <td className="px-4 py-3 font-bold text-white">{safeText(item?.supplierName) || "미상"}</td>
-                    <td className="px-4 py-3 text-cyan-200">{safeText(item?.productName) || "미상 품목"}</td>
-                    <td className="px-4 py-3 text-slate-300">{safeText(item?.productGroup) || "미분류"}</td>
-                    <td className="px-4 py-3 text-slate-300">{safeText(item?.buyerName) || "미상 기관"}</td>
-                    <td className="px-4 py-3 text-slate-400">{safeText(item?.contractName) || "-"}</td>
-                    <td className="px-4 py-3 text-right font-bold text-purple-200">{formatMoney(item?.contractAmount)}</td>
-                    <td className="px-4 py-3 text-slate-300">{safeText(item?.method) || "-"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {!filteredData.length ? <div className="p-10"><EmptyState /></div> : null}
-          </div>
-        </section>
       </main>
     </div>
   );
